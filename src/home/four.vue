@@ -5,8 +5,12 @@
       浏览历史
     </div>
     <div class="content" ref="content">
-      <div v-for="(item, index) in historyList" :key="index" class="con_info">
-        <div class="con_title">{{item.infotitle}}</div>
+      <div v-for="(item, index) in historyList" :key="index" class="con_info" @click="gotoDetail(item)">
+        <div class="con_title">
+          <span v-if="item.infotype === 'report'" class="con_label report">快报</span>
+          <span v-if="item.infotype === 'article'" class="con_label article">论文</span>
+          {{item.infotitle}}
+        </div>
 <!--        <div class="con_title flag" v-if="item.flag === 1">{{item.infotitle}}</div>-->
         <div class="con_time">{{item.insertTime | formatDate }}</div>
       </div>
@@ -89,7 +93,7 @@ export default {
     //     })
     //   })
     // },
-    getScanHistory () {
+    getScanHistory () { // 获取浏览历史
       getScanHistory({
         openid: this.openid
       }).then(res => {
@@ -98,7 +102,25 @@ export default {
         }
         console.log('浏览记录', res.data)
       })
-    }
+    },
+    gotoDetail (val) { // 跳转到论文/报告详情
+      if (val.infotype === 'article') {
+        this.$router.push({
+          path: '/searchDetail',
+          query: {
+            uuid: val.infoid
+          }
+        })
+      } else if (val.infotype === 'report') {
+        this.$router.push({ // 跳转专题快报详情
+          name: 'speExpDetail',
+          query: {
+            item: val.infoid,
+            type: 'index' // 从首页过去
+          }
+        })
+      }
+    },
   }
 }
 </script>
@@ -137,6 +159,18 @@ export default {
     border-bottom: 1px solid #ececec;
     .con_title {
       margin-right: 10px;
+      .con_label {
+        font-size: 13px;
+        padding: 0 8px;
+        border-radius: 4px;
+        color: #fff;
+      }
+      .report {
+        background-color: rgba(0, 115, 231, 0.6);
+      }
+      .article {
+        background-color: #ffb91b;
+      }
     }
     .con_time {
       margin-top: 2px;

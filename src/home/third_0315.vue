@@ -1,22 +1,29 @@
 <template>
   <div class="third_info">
-<!--    <div class="search_info">-->
-<!--      <input type="text" class="third_input" placeholder="搜索" v-model="searchContent" @keyup.enter="gotoSearch" @blur="inputBlur" @focus="getFocus">-->
-<!--      <i class="iconfont iconsousuo" @click="gotoSearch"></i>-->
-<!--    </div>-->
+    <div class="search_info">
+<!--      <search-->
+<!--        @on-result-click="resultClick"-->
+<!--        @on-change="getResult"-->
+<!--        :results="results"-->
+<!--        v-model="key"-->
+<!--        class="searchColor"-->
+<!--        :placeholder="placeholder"-->
+<!--        @on-submit="onSubmit"-->
+<!--        @on-cancel="cancelSearch"-->
+<!--        auto-scroll-to-top-->
+<!--        ref="search"></search>-->
+      <input type="text" class="third_input" placeholder="搜索" v-model="searchContent" @keyup.enter="gotoSearch" @blur="inputBlur" @focus="getFocus">
+      <i class="iconfont iconsousuo" @click="gotoSearch"></i>
+<!--      <button class="third_button" @click="gotoSearch">搜索</button>-->
+    </div>
 <!--    <template>-->
     <div>
-      <popover placement="bottom" class="popover_item" @on-show="onShow" @on-hide="onHide" :gutter="10">
-<!--      <popover placement="bottom" class="popover_item" style="margin: 20px;" @on-show="onShow" @on-hide="onHide">-->
+      <popover placement="bottom" class="popover_item" style="margin: 20px;position: absolute;top: 40%;" @on-show="onShow" @on-hide="onHide">
 <!--      <popover placement="bottom" class="popover_item" style="margin: 20px;position: absolute;top: 40%;" @on-show="onShow" @on-hide="onHide" v-show="showHistory">-->
         <div slot="content" class="popover-demo-content" v-for="(item, index) in searchHistory" :key="index" @click="gotoSelect(item.words)">
           {{item.words}}
         </div>
-        <div class="search_info">
-          <input type="text" class="third_input" placeholder="搜索" v-model="searchContent" @keyup.enter="gotoSearch" @blur="inputBlur" @focus="getFocus">
-          <i class="iconfont iconsousuo" @click="gotoSearch"></i>
-        </div>
-<!--        <button class="btn btn-default"></button>-->
+        <!--        <button class="btn btn-default">fgf</button>-->
       </popover>
     </div>
      <!--    </template>-->
@@ -24,7 +31,6 @@
 </template>
 <script>
 import {getSearchHistory} from '@/api/index'
-import _ from 'underscore'
 import bus from '@/utils/vueBus'
 export default {
   data () {
@@ -57,9 +63,9 @@ export default {
       // if (oldVal === false && newVal === true) {
       //   console.log('0000000000')
       var tips = document.querySelector('.vux-popover')
-      // console.log(tips)
+      console.log(tips)
       tips.style.display = 'none'
-      // console.log(tips)
+      console.log(tips)
       // }
     },
     searchData () {
@@ -73,10 +79,8 @@ export default {
   },
   mounted () {
     var a = document.querySelector('.vux-popover')
-    var jiantou = document.querySelector('.vux-popover-arrow')
     console.log(a)
     a.style.display = 'none'
-    jiantou.style.display = 'none'
     // this.getSearchHistory()
     this.searchContent = this.searchData
   },
@@ -86,34 +90,31 @@ export default {
   methods: {
     inputBlur () { // 失去焦点
       window.scroll(0, 0)
-      // if (this.searchContent !== '') {
-      //   var a = document.querySelector('.vux-popover')
-      //   a.style.display = 'none'
-      // }
-    },
-    getFocus: _.debounce(function () {
-      if (this.searchContent === '') {
-        // alert('搜搜：' + this.searchContent)
-        this.getSearchHistory()
+      if (this.searchContent !== '') {
+        var a = document.querySelector('.vux-popover')
+        console.log('ddddddddddd')
+        a.style.display = 'none'
       }
-      // else {
-      //   var a = document.querySelector('.vux-popover')
-      //   a.style.display = 'none'
-      // }
-    }, 500, true),
-    gotoSelect: _.debounce(function (val) {
+    },
+    getFocus () {
+      if (this.searchContent === '') {
+        this.getSearchHistory()
+      } else {
+        var a = document.querySelector('.vux-popover')
+        a.style.display = 'none'
+      }
+    },
+    gotoSelect (val) {
       this.searchContent = val
-      // alert(this.searchContent)
-      var a = document.querySelector('.vux-popover')
-      a.style.display = 'none'
-      // this.showHistory = false
+      var a = document.querySelector('.v-transfer-dom')
       // // alert(a)
       // alert(a.style.display)
       // a.style.backgroundColor = 'red'
-      this.gotoSearch()
+      // this.gotoSearch()
       // alert(345)
       // var a = document.querySelector('.vux-popover')
-    }, 500, true),
+      a.style.display = 'none'
+    },
     gotoSearch () { // 去搜索
       if (this.searchContent === '') {
         console.log('搜索内容为空')
@@ -144,17 +145,10 @@ export default {
         console.log('搜索历史：', res.data)
         this.searchHistory = res.data.list
         if (this.searchHistory.length > 0) {
-          if (this.showImg === true) {
-            a.style.cssText = 'background-color: #fff;color: #3c3c3c;box-shadow: 0 3px 2px 1px rgba(0, 0, 0 , 0.3);display: block;top: 195px;left: 9%;width: 82%;'
-            // var jiantou = document.querySelector('.vux-popover-arrow')
-            // jiantou.style.left = '10%'
-            // jiantou.style.borderBottom = '5px solid #9c9c9c'
-          } else {
-            a.style.cssText = 'background-color: #fff;color: #3c3c3c;box-shadow: 0 3px 2px 1px rgba(0, 0, 0 , 0.3);display: block;top: 100px;left: 9%;width: 82%;'
-            // var zhe = document.querySelector('.vux-popover-arrow')
-            // zhe.style.left = '10%'
-            // zhe.style.borderBottom = '5px solid #9c9c9c'
-          }
+          a.style.cssText = 'background-color: #fff;color: #3c3c3c;box-shadow: 0 3px 2px 1px rgba(0, 0, 0 , 0.3);display: block;top: 195px;left: 9%;width: 82%;'
+          var jiantou = document.querySelector('.vux-popover-arrow')
+          jiantou.style.left = '10%'
+          jiantou.style.borderBottom = '5px solid #9c9c9c'
           // a.className = 'vux-popover popover_he'
           // console.log(a)
         }
@@ -198,7 +192,6 @@ export default {
     padding-top: 15px;
     background-color: #fff;
     padding-bottom: 15px;
-    position: relative;
   }
   .search_info {
     border: 1px solid #3c3c3c;

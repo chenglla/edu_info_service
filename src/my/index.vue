@@ -21,11 +21,12 @@
       </div>
 <!--      <div class="my_info_first_item" @click="bindAccount"><i class="iconfont icon_lulurenyuanbangding"></i>绑定账号<i class="iconfont icon_luluchangyongtubiao-xianxingdaochu-zhuanqu-"></i></div>-->
 <!--      <div class="my_info_first_item" @click="myBBS"><i class="iconfont iconquanzi"></i>我的圈子<i class="iconfont iconright"></i></div>-->
-      <div class="my_info_first_item" @click="collect"><i class="iconfont iconshoucang"></i>论文收藏<i class="iconfont iconright"></i></div>
-      <div class="my_info_first_item" @click="collect"><i class="iconfont iconshoucang"></i>快报收藏<i class="iconfont iconright"></i></div>
-      <div class="my_info_first_item" @click="suggestFeedback"><i class="iconfont iconyijianfankui1"></i>意见反馈<i class="iconfont iconright"></i></div>
-<!--      <div class="my_info_first_item" @click="statement"><i class="iconfont icon_lulumianzeshengmingcopy"></i>免责声明<i class="iconfont iconright"></i></div>-->
-      <div class="my_info_first_set" @click="setInfo"><i class="iconfont iconshezhi1"></i>设置<i class="iconfont iconright" style="margin-left: 73%"></i></div>
+      <div class="my_info_first_item" @click="gotoOption('collect')"><i class="iconfont iconlunwentimu"></i>论文收藏<i class="iconfont iconright"></i></div>
+      <div class="my_info_first_item" @click="gotoOption('SpeCollect')"><i class="iconfont iconshoucang"></i>快报收藏<i class="iconfont iconright"></i></div>
+      <div class="my_info_first_feedback" @click="gotoOption('suggestFeedback')"><i class="iconfont iconyijianfankui1"></i>意见反馈<i class="iconfont iconright" style="margin-left: 65%"></i></div>
+      <div class="my_info_first_item" @click="gotoOption('aboutUs')"><i class="iconfont iconguanyuwomen1"></i>关于我们<i class="iconfont iconright"></i></div>
+      <div class="my_info_first_item" @click="gotoOption('setInfo')"><i class="iconfont iconshezhi1"></i>设置<i class="iconfont iconright" style="margin-left: 73%"></i></div>
+<!--      <div class="my_info_first_set" @click="gotoOption('setInfo')"><i class="iconfont iconshezhi1"></i>设置<i class="iconfont iconright" style="margin-left: 73%"></i></div>-->
     </div>
   </div>
 </template>
@@ -69,6 +70,9 @@ export default {
     //     this.myInfo.userName = res.data.nickname
     //     this.myInfo.userImg = res.data.userLogin.headimgurl
     //   })
+    },
+    gotoOption (val) {
+      this.$router.push({name: val})
     },
     collect () {
       this.$router.push({path: '/collect'})
@@ -215,6 +219,14 @@ export default {
     line-height: 50px;
     border-bottom: 1px solid #dcdcdc;
   }
+  .my_info_first_feedback {
+    padding-left: 20px;
+    background-color: #fff;
+    margin-top: 13px;
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #dcdcdc;
+  }
   .my_info_first_set {
     padding-left: 20px;
     background-color: #fff;
@@ -238,6 +250,10 @@ export default {
     color: red;
     margin-right: 8px;
   }
+  .iconxinchanpin {
+    color: red;
+    margin-right: 8px;
+  }
   .iconshezhi1 {
     color: #bcbcbc;
     /*color: #BEE9F9;*/
@@ -248,6 +264,14 @@ export default {
   }
   .iconyijianfankui1 {
     color: #ffbe00;
+    margin-right: 8px;
+  }
+  .iconguanyuwomen1 {
+    color: rgb(0, 115, 231);
+    margin-right: 8px;
+  }
+  .iconlunwentimu {
+    color: #42b983;
     margin-right: 8px;
   }
   .icon_lulumianzeshengmingcopy {

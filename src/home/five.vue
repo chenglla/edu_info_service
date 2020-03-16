@@ -2,24 +2,24 @@
   <div class="four_info">
     <div class="title">
 <!--      <i class="iconfont iconsousuo"></i>-->
-      共搜到{{searchResult.total}}条记录
+      共搜到{{total}}条记录
     </div>
-    <div class="content" ref="content">
-      <div v-for="(item, index) in searchResult.list" :key="index" class="con_info" @click="gotoDetail(item)">
+    <div class="content" ref="content" v-show="searchResult.length > 0">
+      <div v-for="(item, index) in searchResult" :key="index" class="con_info" @click="gotoDetail(item)">
         <div class="content_left">
           <i class="iconfont iconpdf"></i>
-          <img src="../assets/img/lw_1.png" alt="" class="con_left_img">
+          <img :src="item['article']['local_access_pdf_header_href']" alt="" class="con_left_img">
         </div>
         <div class="content_right">
 <!--          <div class="con_right_title">{{item.date}}</div>-->
 <!--          <div class="con_right_title">{{item.article_date}}</div>-->
 <!--          <div class="con_right_title">{{item.article_article-title_cn}}</div>-->
-          <div class="con_right_title">{{item['article_article-title']}}</div>
+          <div class="con_right_title">{{item['article']['article_article-title']}}</div>
 <!--          <div class="con_right_title">{{item.article_article-title}}</div>-->
-          <div class="con_right_author"><span v-for="(i, key) in item['contrib_full-name']" :key="key">{{i}}</span></div>
-          <div class="con_right_journal">期刊：{{item['source_source-title_cn']}}</div>
+          <div class="con_right_author"><span v-for="(i, key) in item['article']['contrib_full-name']" :key="key">{{i}}</span></div>
+          <div class="con_right_journal">{{item['article']['source_source-title_cn']}} <span>{{item['article']['date']}}</span></div>
           <div class="con_right_option">
-            <span><i class="iconfont iconshoucang"></i>收藏</span>
+            <span><i class="iconfont iconshoucang" @click.stop="gotoOption('collect', item, index)"></i>收藏</span>
             <span><i class="iconfont iconxiazai1"></i>下载</span>
             <span><i class="iconfont iconfenxiang"></i>分享</span>
           </div>
@@ -30,65 +30,16 @@
 </template>
 <script>
 import BScroll from 'better-scroll'
-import {searchAll} from '@/api/index'
+import {searchAll, collectLW} from '@/api/index'
 import bus from '@/utils/vueBus'
+import _ from 'underscore'
 export default {
   data () {
     return {
       // searchData: '',
       searchResult: [], // 搜索结果
       historyScroll: null,
-      historyList: [{
-        name: '类人型人工智能实体的刑事责任主体资格审视',
-        src: require('../assets/img/lw_1.png'),
-        author: '王耀彬',
-        journal: '软件学报'
-      }, {
-        name: '美第五代战机将获得控制无人机的人工智能',
-        src: require('../assets/img/lw_2.png'),
-        author: '李洪兴',
-        journal: '软件学报'
-      }, {
-        name: '搜狗王小川：以语言为核心布局人工智能',
-        src: require('../assets/img/lw_3.png'),
-        author: '黄海峰',
-        journal: '软件学报'
-      }, {
-        name: '一种配网故障人工智能分析方法的研究',
-        src: require('../assets/img/lw_4.png'),
-        author: '黄园芳',
-        journal: '软件学报'
-      }, {
-        name: '类人型人工智能实体的刑事责任主体资格审视',
-        src: require('../assets/img/lw_1.png'),
-        author: '王耀彬',
-        journal: '软件学报'
-      }, {
-        name: '美第五代战机将获得控制无人机的人工智能',
-        src: require('../assets/img/lw_3.png'),
-        author: '王耀彬',
-        journal: '软件学报'
-      }, {
-        name: '类人型人工智能实体的刑事责任主体资格审视',
-        src: require('../assets/img/lw_4.png'),
-        author: '王耀彬',
-        journal: '软件学报'
-      }, {
-        name: '搜狗王小川：以语言为核心布局人工智能',
-        src: require('../assets/img/lw_2.png'),
-        author: '王耀彬',
-        journal: '软件学报'
-      }, {
-        name: '类人型人工智能实体的刑事责任主体资格审视',
-        src: require('../assets/img/lw_1.png'),
-        author: '王耀彬',
-        journal: '软件学报'
-      }, {
-        name: '美第五代战机将获得控制无人机的人工智能',
-        src: require('../assets/img/lw_4.png'),
-        author: '王耀彬',
-        journal: '软件学报'
-      }]
+      total: ''
     }
   },
   computed: {
@@ -107,6 +58,7 @@ export default {
     searchContent (newVal, oldVal) {
       console.log('变化：', newVal, oldVal)
       if (this.searchContent !== '') {
+        // console.log('ratch:')
         this.getSearchResult()
       }
     }
@@ -146,19 +98,38 @@ export default {
         })
       })
     },
-    getSearchData () {
+    gotoOption (val, item, index) {
+      if (val === 'collect') {
+        this.collectReport(item, index)
+      }
+    },
+    collectReport: _.debounce(function (item, index) { // 收藏论文
+      // window.event? window.event.cancelBubble = true : e.stopPropagation()
+      collectLW({
+        uuid: item['article']['uuid'],
+        openid: this.openid
+      }).then(res => {
+        if (res.data.errno === 0) {
+          var collList = document.querySelectorAll('.iconshoucang')
+          collList[index].style.color = 'red'
+          // this.showCollect = true
+        }
+        console.log('没', res.data)
+      })
+    }, 50, true),
+    // getSearchData () {
       // let that = this
       // bus.$on('searchData', (data) => {
       //   that.searchData = data
       //   console.log('hehheh', that.searchData)
       //   that.getSearchResult()
       // })
-    },
+    // },
     gotoDetail (val) { // 跳转到论文详情
       this.$router.push({
         path: '/searchDetail',
         query: {
-          uuid: val.uuid
+          uuid: val.article.uuid
         }
       })
     },
@@ -169,9 +140,32 @@ export default {
         openid: this.openid
       }).then(res => {
         // console.log(res.data)
+        this.total = res.data.total
         this.searchResult = res.data.data
-        console.log('搜索词：', this.searchContent)
-        console.log('搜索词：', this.searchResult)
+        // this.init()
+        const that = this
+        setTimeout(function () {
+          for (const i in that.searchResult) {
+            if (that.searchResult[i].favorite_status === 'true') {
+              // console.log(11111111111)
+              var collList = document.querySelectorAll('.iconshoucang')
+              collList[i].style.color = 'red'
+              // collList[i].style.backgroundColor = 'red'
+              // var collList = document.querySelector('.content_right')
+              // console.log(collList)
+              // console.log(111111111)
+            }
+          }
+        }, 400)
+        // if (this.searchResult.favorite_status === 'true') {
+        //   console.log(1111111)
+        //   var shouC = document.querySelector('.iconshoucang11')
+        //   console.log(shouC)
+        //   shouC.style.color = 'red'
+        //   // shouC.unbind('click')
+        // }
+        // console.log('搜索词：', this.searchContent)
+        console.log('搜索词：', res.data)
       })
       // for (const i in this.historyList) {
       //   if (this.historyList[i].name.indexOf(this.searchData) > -1) {
@@ -228,8 +222,10 @@ export default {
     .iconfont {
       position: absolute;
       z-index: 1;
-      top: 74%;
-      left: 68%;
+      bottom: 0;
+      /*top: 74%;*/
+      /*left: 68%;*/
+      right: 8%;
       color: #CC3636;
       font-size: 20px;
     }
@@ -239,7 +235,7 @@ export default {
   }
   .con_right_title {
     position: absolute;
-    top: -118px;
+    top: -123px;
     color: #44BF87;
     white-space: nowrap; // 强制一行显示
     width: 100%;
@@ -247,8 +243,12 @@ export default {
     text-overflow: ellipsis; // 超出部分显示省略号
   }
   .con_right_author {
+    white-space: nowrap; // 强制一行显示
+    width: 100%;
+    overflow: hidden; // 超出部分隐藏
+    text-overflow: ellipsis; // 超出部分显示省略号
     position: absolute;
-    top: -88px;
+    top: -90px;
     font-size: 13px;
     color: #9c9c9c;
     span {
@@ -260,13 +260,16 @@ export default {
   }
   .con_right_journal {
     position: absolute;
-    top: -45px;
+    top: -58px;
     color: #3c3c3c;
-    font-size: 15px;
+    font-size: 14px;
+    span {
+      margin-left: 10px;
+    }
   }
   .con_right_option {
     position: absolute;
-    top: -20px;
+    top: -25px;
     font-size: 13px;
     color: #9c9c9c;
     span {
@@ -282,6 +285,7 @@ export default {
     background-color: #fff;
     .con_left_img {
       width: 90%;
+      border: 1px solid #ececec;
     }
   }
 </style>

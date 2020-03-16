@@ -45,8 +45,8 @@ export default {
     width: 100%;
     background-color: rgb(0, 115, 231);
     color: #fff;
-    height: 50px;
-    line-height: 50px;
+    height: 45px;
+    line-height: 45px;
   }
   .iconfont{
     color: #fff;

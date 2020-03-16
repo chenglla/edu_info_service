@@ -4,21 +4,19 @@
       <div class="return__icon" @click="returnBack">
         <i class="iconfont iconfanhui"></i>
       </div>
-      <div class="title">论文收藏</div>
+      <div class="title">专题收藏</div>
     </div>
     <div class="collect_second" v-show="collectList.length > 0" ref="collectSecond">
-      <div>
-        <div class="collect_second_item" v-for="(item, index) in collectList" :key="index" @click="gotoDetail(item)">
-          <div class="collect_second_item_title">{{item.article_title}}</div>
-<!--          <div class="collect_second_item_time">{{item.inserttime | formatDate}}</div>-->
-        </div>
+      <div class="collect_second_item" v-for="(item, index) in collectList" :key="index" @click="gotoDetail(item)">
+        <div class="collect_second_item_title">{{item.report_title}}</div>
+<!--        <div class="collect_second_item_time">{{item.inserttime | formatDate}}</div>-->
       </div>
-   </div>
+    </div>
   </div>
 </template>
 <script>
 import {formatDate} from '../utils/date.js'
-import {getLWCollectList} from '@/api/index'
+import {getReportCollectList} from '@/api/index'
 import BScroll from 'better-scroll'
 export default {
   data () {
@@ -55,14 +53,15 @@ export default {
     },
     gotoDetail (val) {
       this.$router.push({
-        path: '/searchDetail',
+        name: 'speExpDetail',
         query: {
-          uuid: val.articleid
+          item: val.articleid,
+          type: 'my' // 从我的页过去
         }
       })
     },
     getLWCollectList () {
-      getLWCollectList({
+      getReportCollectList({
         openid: this.openid,
         m: 0
       }).then(res => {
@@ -104,7 +103,7 @@ export default {
   }
   .collect_second {
     /*margin-top: 10%;*/
-    height: calc(100% - 52px);
+    height: calc(100% - 60px);
     overflow: hidden;
   }
   .collect_second_item {

@@ -24,13 +24,14 @@
     <div class="search_content_info" ref="searchContentInfo">
 <!--      {{content}}-->
 <!--      <div class="search_title">{{content.name.replace("<span>")}}</div>-->
-      <div>
-        <div class="search_title">{{searchDetail['article_article-title']}}</div>
+<!--      <div>-->
+      <div v-if="Object.keys(searchDetail).length > 0">
+        <div class="search_title">{{searchDetail['article']['article_article-title']}}</div>
 <!--        <div class="search_title" v-html="content.name.replace('red', 'none')"></div>-->
-        <div class="search_author"><span>作者：</span><span v-for="(item, index) in searchDetail['contrib_full-name']" :key="index">{{item}}</span></div>
-        <div class="search_keyword"><span>关键词：</span><span v-for="(item, index) in searchDetail['subj-class-kwd_kwd']" :key="index">{{item}}</span></div>
-        <div class="search_publishDate"><span>出版日期：</span>{{searchDetail.date}}</div>
-        <div class="search_summary"><span>摘要：</span>{{searchDetail.article_abstract}}</div>
+        <div class="search_author"><span>作者：</span><span v-for="(item, index) in searchDetail['article']['contrib_full-name']" :key="index">{{item}}</span></div>
+        <div class="search_keyword"><span>关键词：</span><span v-for="(item, index) in searchDetail['article']['subj-class-kwd_kwd']" :key="index">{{item}}</span></div>
+        <div class="search_publishDate"><span>出版日期：</span>{{searchDetail.article.date}}</div>
+        <div class="search_summary"><span>摘要：</span>{{searchDetail.article.article_abstract}}</div>
       </div>
     </div>
 <!--    <div v-html="content.name">-->
@@ -73,7 +74,7 @@ export default {
     }
   },
   mounted () {
-    this.init()
+    // this.init()
     this.getEachSearch()
     // this.collectOriginLW()
   },
@@ -128,6 +129,15 @@ export default {
       }).then(res => {
         if (res.data.errno === 0) {
           this.searchDetail = res.data.article
+          this.init()
+          console.log(this.searchDetail.favorite_status === 'true')
+          if (this.searchDetail.favorite_status === 'true') {
+            console.log(1111111)
+            var shouC = document.querySelector('.iconshoucang11')
+            console.log(shouC)
+            shouC.style.color = 'red'
+            // shouC.unbind('click')
+          }
         }
         console.log('论文详情：', res.data)
       })
@@ -162,8 +172,8 @@ export default {
     width: 100%;
     background-color: rgb(0, 115, 231);
     color: #fff;
-    height: 50px;
-    line-height: 50px;
+    height: 45px;
+    line-height: 45px;
     flex: none;
     z-index: 1;
   }

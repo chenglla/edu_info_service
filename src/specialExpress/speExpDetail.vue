@@ -147,6 +147,9 @@ export default {
       return this.$route.query.item
       // }
     },
+    type () {
+      return this.$route.query.type
+    },
     showImg () {
       return this.$store.state.infoService.showImg
     },
@@ -173,13 +176,16 @@ export default {
     },
     returnBack () {
       console.log(this.showImg, this.searchData)
-      // this.$router.go(-1)
-      this.$router.push({
-        path: '/specialExpress',
-        query: {
-          type: 2
-        }
-      })
+      if (this.type === 'index' || this.type === 'my') {
+        this.$router.go(-1)
+      } else if (this.type === 'list') {
+        this.$router.push({
+          path: '/specialExpress',
+          query: {
+            type: 2 // 从详情返回
+          }
+        })
+      }
     },
     gotoOption (val) {
       if (val === 'collect') {
@@ -218,8 +224,16 @@ export default {
         id: this.id
       }).then(res => {
         this.reportDetail = res.data.report
+        this.init()
+        console.log(this.reportDetail.favorite_status === 'true')
+        if (this.reportDetail.favorite_status === 'true') {
+          var shouC = document.querySelector('.iconshoucang11')
+          // console.log(shouC)
+          shouC.style.color = 'red'
+          // shouC.unbind('click')
+        }
         console.log('报告详情：', res.data)
-        console.log('报告详情：', Object.keys(this.reportDetail).length)
+        // console.log('报告详情：', Object.keys(this.reportDetail).length)
       })
     },
     // optionI () {
@@ -258,8 +272,8 @@ export default {
     width: 100%;
     background-color: rgb(0, 115, 231);
     color: #fff;
-    height: 50px;
-    line-height: 50px;
+    height: 45px;
+    line-height: 45px;
     flex: none;
     z-index: 1;
   }

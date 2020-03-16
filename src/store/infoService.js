@@ -6,6 +6,7 @@ const infoService = {
     speExpreData: '', // 专题快报内容
     speExpreSearch: '', // 专题快报搜索
     speExpreStatus: 0, // 专题快报状态
+    speExpreCategory: '', // 专题快报分类
   },
   mutations: {
     SET_OPENID: (state, id) => {
@@ -25,6 +26,9 @@ const infoService = {
     },
     SET_SPE_EXP_STATUS: (state, num) => {
       state.speExpreStatus = num
+    },
+    SET_SPE_EXP_CATEGORY: (state, num) => {
+      state.speExpreCategory = num
     },
   }
 }
