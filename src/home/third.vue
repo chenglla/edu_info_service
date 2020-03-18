@@ -9,11 +9,14 @@
       <popover placement="bottom" class="popover_item" @on-show="onShow" @on-hide="onHide" :gutter="10">
 <!--      <popover placement="bottom" class="popover_item" style="margin: 20px;" @on-show="onShow" @on-hide="onHide">-->
 <!--      <popover placement="bottom" class="popover_item" style="margin: 20px;position: absolute;top: 40%;" @on-show="onShow" @on-hide="onHide" v-show="showHistory">-->
-        <div slot="content" class="popover-demo-content" v-for="(item, index) in searchHistory" :key="index" @click="gotoSelect(item.words)">
+        <div slot="content" v-if="searchContent === ''" class="popover-demo-content" v-for="(item, index) in searchHistory" :key="index" @click="gotoSelect(item.words)">
           {{item.words}}
         </div>
+        <div slot="content" v-if="searchContent !== ''" class="popover-demo-content" v-for="(item, index) in searchHistory" :key="index" @click="gotoSelect(item)">
+          {{item}}
+        </div>
         <div class="search_info">
-          <input type="text" class="third_input" placeholder="搜索" v-model="searchContent" @keyup.enter="gotoSearch" @blur="inputBlur" @focus="getFocus">
+          <input type="text" class="third_input" placeholder="搜索" v-model="searchContent" @keyup.enter="gotoSearch" @blur="inputBlur" @focus="getFocus" @input="getSearchList">
           <i class="iconfont iconsousuo" @click="gotoSearch"></i>
         </div>
 <!--        <button class="btn btn-default"></button>-->
@@ -23,7 +26,7 @@
   </div>
 </template>
 <script>
-import {getSearchHistory} from '@/api/index'
+import {getSearchHistory, getRealTimeSearchList} from '@/api/index'
 import _ from 'underscore'
 import bus from '@/utils/vueBus'
 export default {
@@ -48,28 +51,14 @@ export default {
     }
   },
   watch: {
-    // searchContent () {
-    //   this.getFocus()
-    //   // this.getSearchHistory()
-    // },
     showImg (newVal, oldVal) {
       console.log('图片是否展示，', oldVal, newVal)
-      // if (oldVal === false && newVal === true) {
-      //   console.log('0000000000')
       var tips = document.querySelector('.vux-popover')
-      // console.log(tips)
       tips.style.display = 'none'
-      // console.log(tips)
-      // }
     },
     searchData () {
       this.searchContent = this.searchData
-    },
-    // getSearchHistory () {
-    //   if (this.searchContent === '') {
-    //     this.getSearchHistory()
-    //   }
-    // }
+    }
   },
   mounted () {
     var a = document.querySelector('.vux-popover')
@@ -101,39 +90,33 @@ export default {
       //   a.style.display = 'none'
       // }
     }, 500, true),
+    getSearchList () { // 实时获取搜索
+      var a = document.querySelector('.vux-popover')
+      getRealTimeSearchList({
+        openid: this.openid,
+        words: this.searchContent
+      }).then(res => {
+        if (res.data.errno === 0) {
+          this.searchHistory = res.data.list
+          if (this.searchHistory.length === 0) {
+            a.style.display = 'none'
+          }
+          console.log('实时获取列表：', res.data)
+        }
+      })
+    },
     gotoSelect: _.debounce(function (val) {
       this.searchContent = val
-      // alert(this.searchContent)
       var a = document.querySelector('.vux-popover')
       a.style.display = 'none'
-      // this.showHistory = false
-      // // alert(a)
-      // alert(a.style.display)
-      // a.style.backgroundColor = 'red'
       this.gotoSearch()
-      // alert(345)
-      // var a = document.querySelector('.vux-popover')
     }, 500, true),
     gotoSearch () { // 去搜索
       if (this.searchContent === '') {
         console.log('搜索内容为空')
       } else {
-        // console.log('hahahah')
         this.$store.commit('SET_SHOW_IMG', false)
         this.$store.commit('SET_SEARCH_DATA', this.searchContent)
-        // sendMsg () {
-        // bus.$emit('searchData', this.searchContent)
-        // }
-        // searchAll({
-        //   words: this.searchContent,
-        //   // from: 3,
-        //   openid: this.openid
-        // }).then(res => {
-        //   console.log(res.data)
-        // })
-        // this.showImg = true
-        // const val = {'showImg': this.showImg, 'searchContent': this.searchContent}
-        // this.$emit('funcshow', val)
       }
     },
     getSearchHistory () { // 获取搜索历史
@@ -151,14 +134,10 @@ export default {
             // jiantou.style.borderBottom = '5px solid #9c9c9c'
           } else {
             a.style.cssText = 'background-color: #fff;color: #3c3c3c;box-shadow: 0 3px 2px 1px rgba(0, 0, 0 , 0.3);display: block;top: 100px;left: 9%;width: 82%;'
-            // var zhe = document.querySelector('.vux-popover-arrow')
-            // zhe.style.left = '10%'
-            // zhe.style.borderBottom = '5px solid #9c9c9c'
           }
-          // a.className = 'vux-popover popover_he'
-          // console.log(a)
+        } else {
+          a.style.display = 'none'
         }
-        // this.showHistory = true
       })
     },
     // getSearchHistory () { // 获取搜索历史

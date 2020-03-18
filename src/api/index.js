@@ -35,6 +35,13 @@ export function getSearchHistory (req) { // 获取搜索历史
     params: req
   })
 }
+export function getRealTimeSearchList (req) { // 实时搜索论文
+  return request({
+    url: 'getsearchhistorylist',
+    method: 'get',
+    params: req
+  })
+}
 export function getSearchReport (req) { // 检索报告
   return request({
     url: 'searchreport',
