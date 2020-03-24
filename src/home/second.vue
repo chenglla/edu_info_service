@@ -39,17 +39,17 @@ export default {
     font-weight: bold;
     position: absolute;
     /*top: 85px;*/
-    /*left: 160px;*/
+    left: 45%;
     /*font-size: 33px;*/
   }
   .second_right_p1 {
     top: 80px;
-    left: 160px;
+    /*left: 160px;*/
     font-size: 28px;
   }
   .second_right_p2 {
     font-size: 14px;
     top: 117px;
-    left: 160px;
+    /*left: 160px;*/
   }
 </style>

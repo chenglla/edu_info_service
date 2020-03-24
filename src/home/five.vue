@@ -18,9 +18,11 @@
 <!--          <div class="con_right_title">{{item.article_article-title}}</div>-->
           <div class="con_right_author"><span v-for="(i, key) in item['article']['contrib_full-name']" :key="key">{{i}}</span></div>
           <div class="con_right_journal">{{item['article']['source_source-title_cn']}} <span>{{item['article']['date']}}</span></div>
+<!--          <PDF ref="pdf"></PDF>-->
           <div class="con_right_option">
-            <span><i class="iconfont iconshoucang" @click.stop="gotoOption('collect', item, index)"></i>收藏</span>
-            <span><i class="iconfont iconxiazai1"></i>下载</span>
+<!--            <PDF ref="pdf" style="display: none"></PDF>-->
+            <span @click.stop="gotoOption('collect', item['article'], index)"><i class="iconfont iconshoucang"></i>收藏</span>
+            <span @click.stop="gotoOption('downLoad', item['article'], index)"><i class="iconfont iconxiazai1"></i>下载</span>
             <span><i class="iconfont iconfenxiang"></i>分享</span>
           </div>
         </div>
@@ -31,9 +33,12 @@
 <script>
 import BScroll from 'better-scroll'
 import {searchAll, collectLW} from '@/api/index'
+// import PDF from '../components/doenload'
+import pdf from 'vue-pdf'
 import bus from '@/utils/vueBus'
 import _ from 'underscore'
 export default {
+  components: {pdf},
   data () {
     return {
       // searchData: '',
@@ -98,15 +103,55 @@ export default {
         })
       })
     },
+    // 下载
+    downloadWeekly (url, pdfName) {
+      // 调用子组件的下载方法
+      this.downloadPDF(url, pdfName)
+      // this.$refs.pdf.downloadPDF(url, 'pdf下载')
+      // this.$refs.pdf.downloadPDF(Vue.prototype.ApiUrl + '/reports/download/' + id,fileName)
+    },
+    downloadPDF (url, fileName) {
+      const _this = this
+      fetch(url).then(function (response) {
+        if (response.ok) {
+          return response.arrayBuffer()
+        }
+        throw new Error('Network response was not ok.')
+      }).then(function (arraybuffer) {
+        let blob = new Blob([arraybuffer], {
+          type: `application/pdf;charset-UTF-8` // word文档为msword,pdf文档为pdf
+        })
+
+        let objectURL = URL.createObjectURL(blob)
+
+        let downEle = document.createElement('a')
+        let fname = fileName // 下载文件的名字
+        // let fname = `download` // 下载文件的名字
+        downEle.href = objectURL
+        downEle.setAttribute('download', fname)
+        document.body.appendChild(downEle)
+        downEle.click()
+        alert('下载完成')
+        console.log(_this.total)
+        _this.$store.commit('SET_PDFLIST', {url: url, name: fileName})
+        localStorage.setItem('pdfList', {url: url, name: fileName})
+        console.log('下载的有多少：', _this.$store.state.infoService.pdfList)
+      }).catch(function (error) {
+        console.log('There has been a problem with your fetch operation: ', error.message)
+      })
+    },
     gotoOption (val, item, index) {
       if (val === 'collect') {
         this.collectReport(item, index)
+      } else if (val === 'downLoad') {
+        this.downloadWeekly(item['local_access_full-text-link'], item['article_article-title'])
+        // this.$router.push({name: 'usePdf'})
       }
     },
     collectReport: _.debounce(function (item, index) { // 收藏论文
       // window.event? window.event.cancelBubble = true : e.stopPropagation()
       collectLW({
-        uuid: item['article']['uuid'],
+        uuid: item['uuid'],
         openid: this.openid
       }).then(res => {
         if (res.data.errno === 0) {
@@ -136,7 +181,7 @@ export default {
     getSearchResult () { // 找到搜索词，进行高亮显示
       searchAll({
         words: this.searchContent,
-        // from: 3,
+        // from: 11,
         openid: this.openid
       }).then(res => {
         // console.log(res.data)

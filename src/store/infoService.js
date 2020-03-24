@@ -7,6 +7,7 @@ const infoService = {
     speExpreSearch: '', // 专题快报搜索
     speExpreStatus: 0, // 专题快报状态
     speExpreCategory: '', // 专题快报分类
+    pdfList: [], // 存放pdf名字和链接
   },
   mutations: {
     SET_OPENID: (state, id) => {
@@ -29,6 +30,9 @@ const infoService = {
     },
     SET_SPE_EXP_CATEGORY: (state, num) => {
       state.speExpreCategory = num
+    },
+    SET_PDFLIST: (state, list) => {
+      state.pdfList.push(list)
     },
   }
 }

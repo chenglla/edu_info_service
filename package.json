@@ -11,16 +11,17 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "latest",
     "better-scroll": "^1.15.2",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
     "vue": "^2.5.2",
     "vue-js-tap": "^1.2.5",
+    "vue-pdf": "^4.0.8",
     "vue-router": "^3.0.1",
     "vuex": "^3.1.2",
     "vux": "^2.9.4",
-    "vux-loader": "^1.2.9",
-    "axios": "latest"
+    "vux-loader": "^1.2.9"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
