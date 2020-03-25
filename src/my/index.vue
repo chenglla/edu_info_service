@@ -24,7 +24,7 @@
       <div class="my_info_first_item" @click="gotoOption('collect')"><i class="iconfont iconlunwentimu"></i>论文收藏<i class="iconfont iconright"></i></div>
       <div class="my_info_first_item" @click="gotoOption('SpeCollect')"><i class="iconfont iconshoucang"></i>快报收藏<i class="iconfont iconright"></i></div>
       <div class="my_info_first_item" @click="gotoOption('myDownLoad')"><i class="iconfont iconxiazai6"></i>我的下载<i class="iconfont iconright"></i></div>
-      <div class="my_info_first_feedback" @click="gotoOption('suggestFeedback')"><i class="iconfont iconyijianfankui1"></i>意见反馈<i class="iconfont iconright" style="margin-left: 65%"></i></div>
+      <div class="my_info_first_feedback" @click="gotoOption('ideaFeedback')"><i class="iconfont iconyijianfankui1"></i>意见反馈<i class="iconfont iconright" style="margin-left: 65%"></i></div>
       <div class="my_info_first_item" @click="gotoOption('aboutUs')"><i class="iconfont iconguanyuwomen1"></i>关于我们<i class="iconfont iconright"></i></div>
       <div class="my_info_first_item" @click="gotoOption('setInfo')"><i class="iconfont iconshezhi1"></i>设置<i class="iconfont iconright" style="margin-left: 73%"></i></div>
 <!--      <div class="my_info_first_set" @click="gotoOption('setInfo')"><i class="iconfont iconshezhi1"></i>设置<i class="iconfont iconright" style="margin-left: 73%"></i></div>-->
@@ -75,28 +75,28 @@ export default {
     gotoOption (val) {
       this.$router.push({name: val})
     },
-    collect () {
-      this.$router.push({path: '/collect'})
-      // this.$router.push('/collect')
-    },
-    setInfo () {
-      this.$router.push('/setInfo')
-    },
-    bindAccount () {
-      this.$router.push('/bindAccount')
-    },
+    // collect () {
+    //   this.$router.push({path: '/collect'})
+    //   // this.$router.push('/collect')
+    // },
+    // setInfo () {
+    //   this.$router.push('/setInfo')
+    // },
+    // bindAccount () {
+    //   this.$router.push('/bindAccount')
+    // },
     myInfoDetail () {
       this.$router.push('/myInfoDetail')
     },
-    myBBS () {
-      this.$router.push('/myBBS')
-    },
-    suggestFeedback () {
-      this.$router.push('/ideaFeedback')
-    },
-    statement () {
-      this.$router.push('/statement')
-    }
+    // myBBS () {
+    //   this.$router.push('/myBBS')
+    // },
+    // suggestFeedback () {
+    //   this.$router.push('/ideaFeedback')
+    // },
+    // statement () {
+    //   this.$router.push('/statement')
+    // }
   }
 }
 </script>
