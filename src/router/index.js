@@ -17,6 +17,8 @@ const SpeCollect = () => import('@/my/SpeCollect')
 const searchDetail = () => import('@/home/search/searchDetail') // 搜索详情
 const specialExpress = () => import('@/specialExpress/index') // 专题快报首页
 const speExpDetail = () => import('@/specialExpress/speExpDetail') // 专题快报详情
+const ideaFeedback = () => import('@/my/ideaFeedback')
+const aboutUs = () => import('@/my/aboutUs')
 
 export default new Router({
   routes: [
@@ -106,5 +108,21 @@ export default new Router({
     //   name: 'usePdf',
     //   meta: { tab: 'usePdf', title: 'usePdf' }
     // }
+    {
+      path: '/ideaFeedback',
+      components: {
+        default: ideaFeedback
+      },
+      name: 'ideaFeedback',
+      meta: { tab: 'ideaFeedback', title: 'ideaFeedback' }
+    },
+    {
+      path: '/aboutUs',
+      components: {
+        default: aboutUs
+      },
+      name: 'aboutUs',
+      meta: { tab: 'aboutUs', title: 'aboutUs' }
+    },
   ]
 })
