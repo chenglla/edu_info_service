@@ -56,7 +56,7 @@ export default {
         scrollY:true,
         click:true
       })
-
+ 
     })
   }
 

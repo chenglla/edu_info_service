@@ -91,7 +91,7 @@ export default {
     border-right:solid gainsboro 1px ;
     border-bottom:solid gainsboro 1px ;
     box-shadow: 2px 2px 6px 2px gainsboro ; /*边框周围阴影 insert:内阴影、x轴正方向长度、y轴负方向长度、阴影模糊度、扩展半径、阴影颜色*/
-  }
+  } 
   .score_button{
     width: 70%;
     height: 42px;

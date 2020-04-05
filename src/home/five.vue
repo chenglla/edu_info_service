@@ -7,7 +7,7 @@
     <div class="content" ref="content" v-show="searchResult.length > 0">
       <scroller  lock-x height="400px" @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offst="5">
             <div class="box2">
-              <div v-for="(item, index) in allSearchResult" :key="index" class="con_info" @click="gotoDetail(item)">
+              <div v-for="(item, index) in  allSearchResult" :key="index" class="con_info" @click="gotoDetail(item)">
                       <div class="content_left">
                         <i class="iconfont iconpdf"></i>
                         <img :src="item['article']['local_access_pdf_header_href']" alt="" class="con_left_img">
