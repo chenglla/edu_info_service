@@ -4,32 +4,26 @@
 <!--      <i class="iconfont iconsousuo"></i>-->
       共搜到{{total}}条记录
     </div>
-    <div class="content" ref="content">
-<!--    <div class="content" ref="content" v-show="searchResult.length > 0">-->
-      <div>
-        <div class="list-loading" v-if="loading">
-          <div class="loader"></div>
+    <div class="content" ref="content" v-show="searchResult.length > 0">
+      <div v-for="(item, index) in searchResult" :key="index" class="con_info" @click="gotoDetail(item)">
+        <div class="content_left">
+          <i class="iconfont iconpdf"></i>
+          <img :src="item['article']['local_access_pdf_header_href']" alt="" class="con_left_img">
         </div>
-        <div v-for="(item, index) in searchResult" :key="index" class="con_info" @click="gotoDetail(item)" v-if="!loading && searchResult.length > 0">
-          <div class="content_left">
-            <i class="iconfont iconpdf"></i>
-            <img :src="item['article']['local_access_pdf_header_href']" alt="" class="con_left_img">
-          </div>
-          <div class="content_right">
-            <!--          <div class="con_right_title">{{item.date}}</div>-->
-            <!--          <div class="con_right_title">{{item.article_date}}</div>-->
-            <!--          <div class="con_right_title">{{item.article_article-title_cn}}</div>-->
-            <div class="con_right_title">{{item['article']['article_article-title']}}</div>
-            <!--          <div class="con_right_title">{{item.article_article-title}}</div>-->
-            <div class="con_right_author"><span v-for="(i, key) in item['article']['contrib_full-name']" :key="key">{{i}}</span></div>
-            <div class="con_right_journal">{{item['article']['source_source-title_cn']}} <span>{{item['article']['date']}}</span></div>
-            <!--          <PDF ref="pdf"></PDF>-->
-            <div class="con_right_option">
-              <!--            <PDF ref="pdf" style="display: none"></PDF>-->
-              <span @click.stop="gotoOption('collect', item['article'], index)"><i class="iconfont iconshoucang"></i>收藏</span>
-              <span @click.stop="gotoOption('downLoad', item['article'], index)"><i class="iconfont iconxiazai1"></i>下载</span>
-              <!--            <span @click.stop="gotoOption('share', item['article'], index)"><i class="iconfont iconfenxiang"></i>分享</span>-->
-            </div>
+        <div class="content_right">
+<!--          <div class="con_right_title">{{item.date}}</div>-->
+<!--          <div class="con_right_title">{{item.article_date}}</div>-->
+<!--          <div class="con_right_title">{{item.article_article-title_cn}}</div>-->
+          <div class="con_right_title">{{item['article']['article_article-title']}}</div>
+<!--          <div class="con_right_title">{{item.article_article-title}}</div>-->
+          <div class="con_right_author"><span v-for="(i, key) in item['article']['contrib_full-name']" :key="key">{{i}}</span></div>
+          <div class="con_right_journal">{{item['article']['source_source-title_cn']}} <span>{{item['article']['date']}}</span></div>
+<!--          <PDF ref="pdf"></PDF>-->
+          <div class="con_right_option">
+<!--            <PDF ref="pdf" style="display: none"></PDF>-->
+            <span @click.stop="gotoOption('collect', item['article'], index)"><i class="iconfont iconshoucang"></i>收藏</span>
+            <span @click.stop="gotoOption('downLoad', item['article'], index)"><i class="iconfont iconxiazai1"></i>下载</span>
+<!--            <span @click.stop="gotoOption('share', item['article'], index)"><i class="iconfont iconfenxiang"></i>分享</span>-->
           </div>
         </div>
       </div>
@@ -38,7 +32,7 @@
 </template>
 <script>
 import BScroll from 'better-scroll'
-import {searchAll, collectLW, DownloadArticleList, getDownloadArticleList} from '@/api/index'
+import {searchAll, collectLW, DownloadArticleList} from '@/api/index'
 import wx from 'weixin-js-sdk'
 // import _ from 'underscore'
 // import {sharePdf} from '../layout/sharePdf.js'
@@ -51,12 +45,9 @@ export default {
   data () {
     return {
       // searchData: '',
-      loading: false,
       searchResult: [], // 搜索结果
       historyScroll: null,
-      total: '',
-      pdfList: [], // 已经下载过的文件
-      existsPdf: [], // 已经下载过的文件里面的某一个属性集合
+      total: ''
     }
   },
   computed: {
@@ -76,8 +67,6 @@ export default {
       console.log('变化：', newVal, oldVal)
       if (this.searchContent !== '') {
         // console.log('ratch:')
-        this.clearQuery()
-        this.loading = true
         this.getSearchResult()
       }
     }
@@ -100,10 +89,7 @@ export default {
   // },
   mounted () {
     // this.init()
-    this.clearQuery()
-    this.loading = true
     this.getSearchResult()
-    this.getDownloadArticleList() // 获取已经库里已经存在的下载文件
     // this.getSign()
     // this.$router.afterEach((to, from, next) => {
     //   window.scrollTo(0, 0)
@@ -121,97 +107,63 @@ export default {
         })
       })
     },
-    clearQuery () {
-      this.searchResult = []
-      this.total = ''
-      this.loading = true
-    },
-    getDownloadArticleList () { // 获取下载过的文件
-      getDownloadArticleList({
-        openid: this.openid,
-        m: 0
-      }).then(res => {
-        this.pdfList = res.data.list
-        var that = this
-        that.pdfList.map(function (item) {
-          // var that = this
-          that.existsPdf.push(item.articleid)
-        })
-        console.log('列表：', that.pdfList)
-      })
-    },
     // 下载
-    // downloadWeekly (url, pdfName, uuid) {
-    //   // 调用子组件的下载方法
-    //   this.downloadPDF(url, pdfName, uuid)
-    //   // this.$refs.pdf.downloadPDF(url, 'pdf下载')
-    //   // this.$refs.pdf.downloadPDF(Vue.prototype.ApiUrl + '/reports/download/' + id,fileName)
-    // },
-    // downloadPDF: _.debounce(function (url, fileName, uuid) {
-    //   console.log('0000000000000000')
-    //   const _this = this
-    //   fetch(url).then(function (response) {
-    //     if (response.ok) {
-    //       return response.arrayBuffer()
-    //     }
-    //     throw new Error('Network response was not ok.')
-    //   }).then(function (arraybuffer) {
-    //     let blob = new Blob([arraybuffer], {
-    //       type: `application/pdf;charset-UTF-8` // word文档为msword,pdf文档为pdf
-    //     })
-    //     let objectURL = URL.createObjectURL(blob)
-    //     let downEle = document.createElement('a')
-    //     let fname = fileName // 下载文件的名字
-    //     // let fname = `download` // 下载文件的名字
-    //     downEle.href = objectURL
-    //     downEle.setAttribute('download', fname)
-    //     document.body.appendChild(downEle)
-    //     downEle.click()
-    //     // console.log(_this.total)
-    //     DownloadArticleList({
-    //       uuid: uuid,
-    //       openid: _this.openid
-    //     }).then(res => {
-    //       if (res.data.errno === 0) {
-    //         alert('下载完成')
-    //       }
-    //       console.log('xiazai:', res.data)
-    //     })
-    //     // _this.$store.commit('SET_PDFLIST', {url: url, name: fileName})
-    //     // localStorage.setItem('pdfList', {url: url, name: fileName})
-    //     // console.log('下载的有多少：', _this.$store.state.infoService.pdfList)
-    //   }).catch(function (error) {
-    //     console.log('There has been a problem with your fetch operation: ', error.message)
-    //   })
-    // }, 50, true),
+    downloadWeekly (url, pdfName, uuid) {
+      // 调用子组件的下载方法
+      this.downloadPDF(url, pdfName, uuid)
+      // this.$refs.pdf.downloadPDF(url, 'pdf下载')
+      // this.$refs.pdf.downloadPDF(Vue.prototype.ApiUrl + '/reports/download/' + id,fileName)
+    },
+    downloadPDF: _.debounce(function (url, fileName, uuid) {
+      console.log('0000000000000000')
+      const _this = this
+      fetch(url).then(function (response) {
+        if (response.ok) {
+          return response.arrayBuffer()
+        }
+        throw new Error('Network response was not ok.')
+      }).then(function (arraybuffer) {
+        let blob = new Blob([arraybuffer], {
+          type: `application/pdf;charset-UTF-8` // word文档为msword,pdf文档为pdf
+        })
+        let objectURL = URL.createObjectURL(blob)
+        let downEle = document.createElement('a')
+        let fname = fileName // 下载文件的名字
+        // let fname = `download` // 下载文件的名字
+        downEle.href = objectURL
+        downEle.setAttribute('download', fname)
+        document.body.appendChild(downEle)
+        downEle.click()
+        // console.log(_this.total)
+        DownloadArticleList({
+          uuid: uuid,
+          openid: _this.openid
+        }).then(res => {
+          if (res.data.errno === 0) {
+            alert('下载完成')
+          }
+          console.log('xiazai:', res.data)
+        })
+        // _this.$store.commit('SET_PDFLIST', {url: url, name: fileName})
+        // localStorage.setItem('pdfList', {url: url, name: fileName})
+        // console.log('下载的有多少：', _this.$store.state.infoService.pdfList)
+      }).catch(function (error) {
+        console.log('There has been a problem with your fetch operation: ', error.message)
+      })
+    }, 50, true),
     gotoOption (val, item, index) {
       if (val === 'collect') {
         this.collectReport(item, index)
       } else if (val === 'downLoad') {
-        this.downLoadArticle(item)
-      }
-    },
-    downLoadArticle (item) { // 下载文章，实际只是存到库里
-      if (this.existsPdf.indexOf(item['uuid']) > -1) {
-        this.$vux.toast.show({
-          type: 'text',
-          text: '已存在‘我的-资料库’中',
-          width: '8em'
-        })
-      } else {
-        DownloadArticleList({
-          uuid: item['uuid'],
-          openid: this.openid
-        }).then(res => {
-          if (res.data.errno === 0) {
-            // 显示
-            this.$vux.toast.show({
-              text: '已添加到‘我的-资料库’中',
-              width: '8em'
-            })
-          }
-          console.log('xiazai:', res.data)
-        })
+        this.downloadWeekly(item['local_access_full-text-link'], item['article_article-title'], item['uuid'])
+        // this.downloadWeekly(item['local_access_full-text-link'], item['article_article-title'], item[''])
+        // this.$router.push({name: 'usePdf'})
+      } else if (val === 'share') {
+        this.getShareInfo(item)
+        // this.getSign()
+        // this.$router.push({name: 'share'})
+        // const a = sharePdf()
+        // console.log('000000000000', a)
       }
     },
     // getShareInfo (item) {
@@ -330,7 +282,6 @@ export default {
         this.total = res.data.total
         this.searchResult = res.data.data
         // this.init()
-        this.loading = false
         const that = this
         setTimeout(function () {
           for (const i in that.searchResult) {

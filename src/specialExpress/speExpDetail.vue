@@ -11,7 +11,7 @@
 <!--    <div class="iconfontList" v-show="showOption">-->
         <i class="iconfont iconshoucang11" @click="gotoOption('collect')"></i>
         <i class="iconfont iconxiazai4" @click="gotoOption('downLoad')"></i>
-        <i class="iconfont iconrotateRight" @click="gotoOption('share')"></i>
+<!--        <i class="iconfont iconrotateRight" @click="gotoOption('share')"></i>-->
     </div>
     <div class="add_close">
 <!--      <img src="../assets/img/buton.png" alt="">-->
@@ -57,6 +57,7 @@
 <script>
 import {formatDate} from '../utils/date.js'
 import BScroll from 'better-scroll'
+import wx from 'weixin-js-sdk'
 import {getEachReportDetail, collectReport} from '@/api/index'
 export default {
   data () {
@@ -224,6 +225,7 @@ export default {
         id: this.id
       }).then(res => {
         this.reportDetail = res.data.report
+        this.getShareInfo(this.reportDetail.report)
         this.init()
         console.log(this.reportDetail.favorite_status === 'true')
         if (this.reportDetail.favorite_status === 'true') {
@@ -234,6 +236,33 @@ export default {
         }
         console.log('报告详情：', res.data)
         // console.log('报告详情：', Object.keys(this.reportDetail).length)
+      })
+    },
+    getShareInfo (item) {
+      wx.ready(function () { // 需在用户可能点击分享按钮前就先调用
+        wx.updateAppMessageShareData({
+          // wx.updateAppMessageShareData({
+          title: item.reportTitle, // 分享标题
+          desc: item.reportTitle, // 分享描述
+          link: 'http://47.93.225.12:8081/downloadbyfastdfspath?fastdfspath=group1/M00/00/9B/rBEFwF5h-kWAXAwmABh-0pHcz1E7185931', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: 'http://47.93.225.12:8081/downloadbyfastdfspath?fastdfspath=group1/M00/01/2B/rBEFwF6EpQmARXaIAAAPjHUrsjA1404774', // 分享图标
+          success: function () {
+            // 设置成功
+            console.log('分享成功')
+          }
+        })
+        wx.updateTimelineShareData({
+          title: item.reportTitle, // 分享标题
+          link: 'http://47.93.225.12:8081/downloadbyfastdfspath?fastdfspath=group1/M00/00/9B/rBEFwF5h-kWAXAwmABh-0pHcz1E7185931', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: 'http://47.93.225.12:8081/downloadbyfastdfspath?fastdfspath=group1/M00/01/2B/rBEFwF6EpQmARXaIAAAPjHUrsjA1404774', // 分享图标
+          success: function () {
+            // 设置成功
+            console.log('分享成功')
+          }
+        })
+      })
+      wx.error(function (res) {
+        alert('失败')
       })
     },
     // optionI () {
@@ -403,24 +432,15 @@ export default {
     /*}*/
   }
   .iconshoucang11 {
-    /*position: fixed;*/
-    top: 52%;
-    /*font-size: 18px;*/
-    /*box-shadow: 1px 1px 1px 2px rgb(0, 115, 231);*/
-    /*color: #CC3333;*/
-    /*color: #CC3636;*/
+    top: 60%;
+    /*top: 52%;*/
   }
   .iconxiazai4 {
-    top: 60%;
-    /*font-size: 18px;*/
-    /*color: #009999;*/
-    /*color: #38B5E2;*/
+    /*top: 60%;*/
+    top: 68%;
   }
   .iconrotateRight {
     top: 68%;
-    /*font-size: 18px;*/
-    /*color: #FFCC00;*/
-    /*color: #ffbe00;*/
   }
   .iconjiahao {
     top: 76%;

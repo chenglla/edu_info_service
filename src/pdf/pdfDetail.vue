@@ -1,63 +1,49 @@
-<!--<template>-->
-<!--  <div class="pdf" v-show="fileType === 'pdf'">-->
-<!--    <p class="arrow">-->
-<!--&lt;!&ndash;      // 上一页&ndash;&gt;-->
-<!--      <span @click="changePdfPage(0)" class="turn" :class="{grey: currentPage===1}">Preview</span>-->
-<!--      {{currentPage}} / {{pageCount}}-->
-<!--&lt;!&ndash;      // 下一页&ndash;&gt;-->
-<!--      <span @click="changePdfPage(1)" class="turn" :class="{grey: currentPage===pageCount}">Next</span>-->
-<!--    </p>-->
-<!--&lt;!&ndash;    // 自己引入就可以使用,这里我的需求是做了分页功能,如果不需要分页功能,只要src就可以了&ndash;&gt;-->
-<!--&lt;!&ndash;    // src需要展示的PDF地址&ndash;&gt;-->
-<!--&lt;!&ndash;    // 当前展示的PDF页码&ndash;&gt;-->
-<!--&lt;!&ndash;    // PDF文件总页码&ndash;&gt;-->
-<!--&lt;!&ndash;    // 一开始加载的页面&ndash;&gt;-->
-<!--&lt;!&ndash;    // 加载事件&ndash;&gt;-->
-<!--    <pdf :src="src" :page="currentPage"-->
-<!--    @num-pages="pageCount=$event"-->
-<!--    @page-loaded="currentPage=$event"-->
-<!--    @loaded="loadPdfHandler">-->
-<!--    </pdf>-->
-<!--&lt;!&ndash;      <div style="height: 75vh;overflow-y: auto;overflow-x: hidden;">&ndash;&gt;-->
-<!--&lt;!&ndash;        <pdf :src="src"></pdf>&ndash;&gt;-->
-<!--&lt;!&ndash;      </div>&ndash;&gt;-->
-<!--  </div>-->
-<!--</template>-->
 <template>
   <div class="collect_info">
     <div class="score_header">
       <div class="return__icon" @click="returnBack">
         <i class="iconfont iconfanhui"></i>
       </div>
-      <div class="title">下载详情</div>
+      <div class="title">论文详情</div>
     </div>
-    <div class="pdfIn" v-show="fileType === 'pdf'" ref="pdfView">
-<!--    <div class="pdfIn" v-show="fileType === 'pdf'" ref="pdfView">-->
-      <div>
-        <pdf
-          v-for="i in numPages"
-          ref="pdfs"
-          :src="src"
-          :key="i"
-          :page="i"
-        >
-        </pdf>
-      </div>
+    <div class="pdf" v-show="fileType === 'pdf'">
+      <p class="arrow">
+        <!--      // 上一页-->
+        <span @click="changePdfPage(0)" class="turn" :class="{grey: currentPage===1}">上一页</span>
+        {{currentPage}} / {{pageCount}}
+        <!--      // 下一页-->
+        <span @click="changePdfPage(1)" class="turn" :class="{grey: currentPage===pageCount}">下一页</span>
+      </p>
+      <!--    // 自己引入就可以使用,这里我的需求是做了分页功能,如果不需要分页功能,只要src就可以了-->
+      <!--    // src需要展示的PDF地址-->
+      <!--    // 当前展示的PDF页码-->
+      <!--    // PDF文件总页码-->
+      <!--    // 一开始加载的页面-->
+      <!--    // 加载事件-->
+      <pdf :src="src" :page="currentPage"
+           @num-pages="pageCount=$event"
+           @page-loaded="currentPage=$event"
+           @loaded="loadPdfHandler">
+      </pdf>
+      <!--      <div style="height: 75vh;overflow-y: auto;overflow-x: hidden;">-->
+      <!--        <pdf :src="src"></pdf>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
 
 <script>
 import pdf from 'vue-pdf'
-import BScroll from 'better-scroll'
+// import AnyTouch from 'any-touch'
+// import BScroll from 'better-scroll'
 export default {
-  // metaInfo: {
-  //   title: 'This is the test',
-  //   meta: [
-  //     { charset: 'utf-8' },
-  //     { name: 'viewport', content: 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=2,user-scalable=yes' }
-  //   ]
-  // },
+  metaInfo: {
+    // title: 'This is the test',
+    meta: [
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width,initial-scale=1.0, maximum-scale=2.0, user-scalable=yes' }
+    ]
+  },
   components: {pdf},
   data () {
     return {
@@ -65,41 +51,25 @@ export default {
       pageCount: 0, // pdf文件总页数
       fileType: 'pdf', // 文件类型
       src: '', // pdf文件地址
-      numPages: 0, // 总页数
-      pdfScroll: null,
+      // numPages: 0, // 总页数
+      // pdfScroll: null,
     }
   },
   computed: {
     pdfInfo () {
       console.log('pdf:', this.$route.query.pdfInfo)
-      return this.$route.query.pdfInfo
+      return JSON.parse(this.$route.query.pdfInfo)
     }
   },
   created () {
     // 有时PDF文件地址会出现跨域的情况,这里最好处理一下
     // this.src = pdf.createLoadingTask(this.pdfInfo.url)
-    this.src = pdf.createLoadingTask(this.pdfInfo.url)
-    this.src.promise.then(pdf => {
-      this.numPages = pdf.numPages
-    })
-    this.init()
-    // 通过$refs.pdfs拿到的是数组（多个canvas拼接而成）
-    // this.$refs.pdfs[0].$refs.canvas // 获取canvas节点
-    console.log('啥：', this.$refs.pdfs)
-    // this.$refs.pdfs.$refs.canvas.style.width = '120%'
-    // this.$refs.pdfs.$refs.canvas.style.width = '120%'
-    // this.$refs.pdfs.$refs.canvas.style.transform = 'scale(1.5)'
+    // http://47.93.225.12:8081/downloadbyfastdfspath?fastdfspath=
+    this.src = pdf.createLoadingTask('http://47.93.225.12:8081/downloadbyfastdfspath?fastdfspath=' + this.pdfInfo['local_access_full-text-link'])
   },
   methods: {
     returnBack () {
       this.$router.push({name: 'myDownLoad'})
-    },
-    init () {
-      this.$nextTick(() => {
-        this.pdfScroll = new BScroll(this.$refs.pdfView, {
-          click: true
-        })
-      })
     },
     // 改变PDF页码,val传过来区分上一页下一页的值,0上一页,1下一页
     changePdfPage (val) {
@@ -149,6 +119,16 @@ export default {
   .iconfanhui {
     margin-top: 10px;
     font-size: 20px;
+  }
+  .pdf {
+    text-align: center;
+    .arrow {
+      margin: 8px 0;
+      /*font-size: 14px;*/
+    }
+    .grey {
+      color: #9c9c9c;
+    }
   }
   .pdfIn {
     height: calc(100% - 50px);

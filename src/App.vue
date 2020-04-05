@@ -8,6 +8,7 @@
 
 <script>
 import {getUserInfo} from './api'
+// import wx from 'weixin-js-sdk'
 export default {
   name: 'App',
   data () {
@@ -39,7 +40,7 @@ export default {
         }, 0)
       }
     })
-    // this.setWxjs()
+    this.setWxjs()
   },
   methods: {
     checkRedict () {
@@ -48,6 +49,29 @@ export default {
       }).then(res => {
         console.log('用户信息：', res.data)
       })
+    },
+    setWxjs () { // 微信分享接口
+      /* eslint-disable */
+      let url = encodeURIComponent(window.location.href.split('#')[0])
+      // alert('url是啥：' + url)
+      // console.log('url是啥：' + url)
+      this.$axios.get('http://zhongkeruitong.top/towerImg/search_lu/wechat/getSign?url=' + url).then(res => {
+        if (res.data.code === 0) {
+          wx.config({
+            debug: false,
+            appId: res.data.data.appId,
+            timestamp: res.data.data.timestamp,
+            nonceStr: res.data.data.nonceStr,
+            signature: res.data.data.signature,
+            jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
+          })
+          // wx.ready(() => {
+          //   wx.updateAppMessageShareData(share)
+          //   wx.updateTimelineShareData(share)
+          // })
+        }
+      })
+      /* eslint-enable */
     }
     //   this.$axios.get('http://www.kgai.tech//getAllInfoByWechatId?wechatId=' + this.openid
     //     // this.$axios(
@@ -77,16 +101,17 @@ export default {
 }
 </script>
 
-<style>
-  body{
-    margin: 0;
-    padding: 0;
-  }
-  html, body,
-  #app{
+<style lang="scss">
+  @import './styles/index.scss'; /*全局自定义样式*/
+  #app,
+  html, body{
     width: 100%;
     height: 100%;
     margin: 0;
+  }
+  body {
+    margin: 0;
+    padding: 0;
   }
 /*#app {*/
 /*  font-family: 'Avenir', Helvetica, Arial, sans-serif;*/

@@ -31,24 +31,24 @@
   </div>
 </template>
 
-<script scoped>
-  import BScroll from 'better-scroll'
+<script>
+import BScroll from 'better-scroll'
 export default {
   data () {
     return {
-      Time:"3天前"
+      Time: '3天前'
     }
   },
   methods: {
     returnBack () {
       this.$router.push({name: 'my'})
     },
-   },
+  },
   mounted () {
-    this.$nextTick(()=>{
-      this.scroll = new BScroll(this.$refs.wrapper,{
-        scrollY:true,
-        click:true
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        scrollY: true,
+        click: true
       })
     })
   }
@@ -97,9 +97,7 @@ export default {
     /*上，右，下，左*/
   }
   .content{
-
     width: 100%;
-
   }
   /*文本标题*/
   .text_title h3{
