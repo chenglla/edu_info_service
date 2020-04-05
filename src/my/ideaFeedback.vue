@@ -101,5 +101,8 @@ export default {
     color: white!important;
     margin-top: 20px;
   }
+  #btn{
+    background-color:#0073E7;
+  }
 
 </style>
