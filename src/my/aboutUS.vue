@@ -31,12 +31,26 @@
   </div>
 </template>
 
+
+<script scoped>
+  import BScroll from 'better-scroll'
+  // let wrapper = document.querySelector('.wrapper')
+  // let scroll = new BScroll(wrapper)
+
 <script>
 import BScroll from 'better-scroll'
+
 export default {
+  //name:"Scroll",
   data () {
     return {
-      Time: '3天前'
+
+      Time:"3天前",
+     // scroll: null
+
+
+      //Time: '3天前'
+
     }
   },
   methods: {
@@ -45,11 +59,17 @@ export default {
     },
   },
   mounted () {
-    this.$nextTick(() => {
-      this.scroll = new BScroll(this.$refs.wrapper, {
-        scrollY: true,
-        click: true
+
+    this.$nextTick(()=>{
+      this.scroll = new BScroll(
+      this.$refs.content,{
+        scrollY:true,
+        click:true
+
+    
+
       })
+ 
     })
   }
 
@@ -61,12 +81,13 @@ export default {
   .collect_info {
     height: 100%;
 
+
   }
   .score_header {
-
+    top: 0px;
     text-align: center;
     letter-spacing: 0.2em;
-    position: relative;
+    position: fixed;
     font-size: 18px;
     width: 100%;
     background-color: rgb(0, 115, 231);
@@ -88,15 +109,20 @@ export default {
   }
   /*文本div*/
   .wrapper{
-    display: flex;
+    top: 50px;
+    position: relative;
     overflow-x: hidden;
     height:100% ;
     display: flex;
     scroll-behavior: smooth;
-    margin: 10px 1px 5px 20px;
+    margin: 10px 20px 5px 20px;
     /*上，右，下，左*/
   }
   .content{
+
+    position:absolute;
+
+
     width: 100%;
   }
   /*文本标题*/
