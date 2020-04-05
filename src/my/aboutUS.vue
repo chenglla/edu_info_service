@@ -31,16 +31,25 @@
   </div>
 </template>
 
+
 <script scoped>
   import BScroll from 'better-scroll'
   // let wrapper = document.querySelector('.wrapper')
   // let scroll = new BScroll(wrapper)
+
+<script>
+import BScroll from 'better-scroll'
+
 export default {
   //name:"Scroll",
   data () {
     return {
+
       Time:"3天前",
      // scroll: null
+
+
+      //Time: '3天前'
 
     }
   },
@@ -48,13 +57,17 @@ export default {
     returnBack () {
       this.$router.push({name: 'my'})
     },
-   },
+  },
   mounted () {
+
     this.$nextTick(()=>{
       this.scroll = new BScroll(
       this.$refs.content,{
         scrollY:true,
         click:true
+
+    
+
       })
  
     })
@@ -106,9 +119,11 @@ export default {
     /*上，右，下，左*/
   }
   .content{
-    position:absolute;
-    width: 100%;
 
+    position:absolute;
+
+
+    width: 100%;
   }
   /*文本标题*/
   .text_title h3{

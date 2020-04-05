@@ -4,13 +4,13 @@
       <div class="return__icon" @click="returnBack">
         <i class="iconfont iconfanhui"></i>
       </div>
-      <div class="title">我的下载</div>
+      <div class="title">资料库</div>
     </div>
-<!--    <div class="collect_second" ref="collectSecond">-->
-    <div class="collect_second" v-show="pdfList.length > 0" ref="collectSecond">
+    <div class="collect_second" ref="collectSecond">
+<!--    <div class="collect_second" v-show="pdfList.length > 0" ref="collectSecond">-->
       <div>
         <div class="collect_second_item" v-for="(item, index) in pdfList" :key="index" @click="gotoDetail(item)">
-          <div class="collect_second_item_title">{{item.name}}</div>
+          <div class="collect_second_item_title">{{item.article_title}}</div>
 <!--          <div class="collect_second_item_time">{{item.inserttime | formatDate}}</div>-->
         </div>
       </div>
@@ -19,26 +19,28 @@
 </template>
 <script>
 import {formatDate} from '../utils/date.js'
-// import {getLWCollectList} from '@/api/index'
+import {getDownloadArticleList} from '@/api/index'
 import BScroll from 'better-scroll'
 export default {
   data () {
     return {
       collectList: [],
-      collectScroll: null
+      collectScroll: null,
+      pdfList: []
     }
   },
   computed: {
     openid () {
       return this.$store.state.infoService.openid
     },
-    pdfList () {
-      // console.log(localStorage.pdfList)
-      // return localStorage.pdfList
-      return this.$store.state.infoService.pdfList
-    }
+    // pdfList () {
+    //   // console.log(localStorage.pdfList)
+    //   // return localStorage.pdfList
+    //   return this.$store.state.infoService.pdfList
+    // }
   },
   mounted () {
+    this.getDownloadArticleList()
     // this.getLWCollectList()
   },
   filters: {
@@ -59,11 +61,20 @@ export default {
         })
       })
     },
+    getDownloadArticleList () {
+      getDownloadArticleList({
+        openid: this.openid,
+        m: 0
+      }).then(res => {
+        this.pdfList = res.data.list
+        console.log('列表：', this.pdfList)
+      })
+    },
     gotoDetail (val) {
       this.$router.push({
         path: '/pdfDetail',
         query: {
-          pdfInfo: val
+          pdfInfo: JSON.stringify(val)
         }
       })
     },

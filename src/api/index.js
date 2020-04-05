@@ -91,3 +91,18 @@ export function getReportCollectList (req) { // 获取快报收藏
     params: req
   })
 }
+export function DownloadArticleList (req) { // 下载论文列表
+  return request({
+    url: 'downloadonearticle',
+    method: 'get',
+    params: req
+  })
+}
+export function getDownloadArticleList (req) { // 获取下载论文列表
+  return request({
+    url: 'getdownloadarticlelist',
+    method: 'get',
+    params: req
+  })
+}
+

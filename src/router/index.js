@@ -12,6 +12,8 @@ const my = () => import('@/my/index')
 const collect = () => import('@/my/collect')
 const myDownLoad = () => import('@/my/myDownLoad')
 const pdfDetail = () => import('@/pdf/pdfDetail')
+// const pdfDetail = () => import('@/pdf/pdfDetail_0402')
+const share = () => import('@/home/share') // 分享论文
 // const usePdf = () => import('@/components/usePdf')
 const SpeCollect = () => import('@/my/SpeCollect')
 const searchDetail = () => import('@/home/search/searchDetail') // 搜索详情
@@ -67,6 +69,14 @@ export default new Router({
       },
       name: 'pdfDetail',
       meta: { tab: 'pdfDetail', title: 'pdfDetail' }
+    },
+    {
+      path: '/share', // 分享链接
+      components: {
+        default: share
+      },
+      name: 'share',
+      meta: { tab: 'share', title: 'share' }
     },
     {
       path: '/SpeCollect',
