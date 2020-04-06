@@ -4,7 +4,8 @@
       <i class="iconfont icon_luluxiaoxitongzhi1"></i>
 <!--    </div>-->
     <div class="my_info_first">
-      <div class="my_info_first_info" @click="myInfoDetail">
+      <div class="my_info_first_info">
+<!--      <div class="my_info_first_info" @click="myInfoDetail">-->
         <div class="user-basic">
 <!--          <img class="user-logo" src="../assets/img/2.png"/>-->
           <img class="user-logo" :src="myInfo.userImg"/>
@@ -14,9 +15,9 @@
           <div class="user-name">{{myInfo.userName}}</div>
 <!--          <div class="vip-flag">未实名</div>-->
         </div>
-        <div class="user_iconfont">
-          <i class="iconfont iconright"></i>
-        </div>
+<!--        <div class="user_iconfont">-->
+<!--          <i class="iconfont iconright"></i>-->
+<!--        </div>-->
 <!--        <i class="iconfont icon_luluchangyongtubiao-xianxingdaochu-zhuanqu-"></i>-->
       </div>
 <!--      <div class="my_info_first_item" @click="bindAccount"><i class="iconfont icon_lulurenyuanbangding"></i>绑定账号<i class="iconfont icon_luluchangyongtubiao-xianxingdaochu-zhuanqu-"></i></div>-->

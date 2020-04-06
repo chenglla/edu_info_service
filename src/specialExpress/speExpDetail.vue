@@ -200,7 +200,9 @@ export default {
       }).then(res => {
         if (res.data.errno === 0) {
           var collect = document.querySelector('.iconshoucang11')
-          collect.style.color = 'red'
+          collect.style.color = '#FFFF00'
+          // collect.style.color = '#ffb91b'
+          // collect.style.color = 'red'
           // this.showCollect = true
         }
         console.log(res.data)
@@ -213,7 +215,8 @@ export default {
       }).then(res => {
         if (res.data.errno !== 0) {
           var collect = document.querySelector('.iconshoucang11')
-          collect.style.color = 'red'
+          collect.style.color = '#FFFF00'
+          // collect.style.color = 'red'
           // this.showCollect = true
         }
         console.log(res.data)
@@ -231,7 +234,9 @@ export default {
         if (this.reportDetail.favorite_status === 'true') {
           var shouC = document.querySelector('.iconshoucang11')
           // console.log(shouC)
-          shouC.style.color = 'red'
+          shouC.style.color = '#FFFF00'
+          // shouC.style.color = '#ffb91b'
+          // shouC.style.color = 'red'
           // shouC.unbind('click')
         }
         console.log('报告详情：', res.data)

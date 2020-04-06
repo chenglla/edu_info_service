@@ -198,7 +198,9 @@ export default {
       }).then(res => {
         if (res.data.errno === 0) {
           var collect = document.querySelector('.iconshoucang11')
-          collect.style.color = 'red'
+          collect.style.color = '#FFFF00'
+          // collect.style.color = '#ffb91b'
+          // collect.style.color = 'red'
           // this.showCollect = true
         }
         console.log('没', res.data)
@@ -236,7 +238,9 @@ export default {
             // console.log(1111111)
             var shouC = document.querySelector('.iconshoucang11')
             console.log(shouC)
-            shouC.style.color = 'red'
+            shouC.style.color = '#FFFF00'
+            // shouC.style.color = '#ffb91b'
+            // shouC.style.color = 'red'
             // shouC.unbind('click')
           }
         }

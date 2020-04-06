@@ -132,6 +132,8 @@ export default {
         m: 0
       }).then(res => {
         this.pdfList = res.data.list
+        console.log('sdfsdfsf', res.data)
+        console.log('sdfsdfsf6746546', res.data.list)
         var that = this
         that.pdfList.map(function (item) {
           // var that = this
