@@ -24,37 +24,34 @@
   </div>
 </template>
 <script>
- import { Toast,XButton, XTextarea, Group, XInput,PopupPicker} from 'vux'
+import {XButton, XTextarea, Group, XInput, PopupPicker} from 'vux'
 export default {
   data () {
-       return {
-        position: 'default',
-        showPositionValue: false,
-  //       //value5: ['A'],
-  //       list: [['意见1', '意见2', '意见3']],
-       }
-     },
+    return {
+      position: 'default',
+      showPositionValue: false
+      //       //value5: ['A'],
+      //       list: [['意见1', '意见2', '意见3']],
+    }
+  },
   methods: {
     // 提交之后消息框设置
     showPosition (position) {
-          this.position = position
-          this.showPositionValue = true
-          document.getElementById("btn").style.backgroundColor="gray"
-        },
-
-
+      this.position = position
+      this.showPositionValue = true
+      document.getElementById('btn').style.backgroundColor = 'gray'
+    },
     returnBack () {
       this.$router.push({name: 'my'})
-    },
-   },
+    }
+  },
   components: {
-      XButton,
-      XTextarea,
-      Group,
-      XInput,
-      Toast,
-      PopupPicker
-    },
+    XButton,
+    XTextarea,
+    Group,
+    XInput,
+    PopupPicker
+  }
 }
 </script>
 <style scoped lang="scss">
@@ -91,7 +88,7 @@ export default {
     border-right:solid gainsboro 1px ;
     border-bottom:solid gainsboro 1px ;
     box-shadow: 2px 2px 6px 2px gainsboro ; /*边框周围阴影 insert:内阴影、x轴正方向长度、y轴负方向长度、阴影模糊度、扩展半径、阴影颜色*/
-  } 
+  }
   .score_button{
     width: 70%;
     height: 42px;
