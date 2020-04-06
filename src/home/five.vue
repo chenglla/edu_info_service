@@ -4,6 +4,36 @@
 <!--      <i class="iconfont iconsousuo"></i>-->
       共搜到{{total}}条记录
     </div>
+    <div class="content" ref="content" v-show="searchResult.length > 0">
+      <scroller  lock-x height="400px" @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offst="5">
+            <div class="box2">
+              <div v-for="(item, index) in  allSearchResult" :key="index" class="con_info" @click="gotoDetail(item)">
+                      <div class="content_left">
+                        <i class="iconfont iconpdf"></i>
+                        <img :src="item['article']['local_access_pdf_header_href']" alt="" class="con_left_img">
+                      </div>
+                      <div class="content_right">
+              <!--          <div class="con_right_title">{{item.date}}</div>-->
+              <!--          <div class="con_right_title">{{item.article_date}}</div>-->
+              <!--          <div class="con_right_title">{{item.article_article-title_cn}}</div>-->
+                        <div class="con_right_title">{{item['article']['article_article-title']}}</div>
+              <!--          <div class="con_right_title">{{item.article_article-title}}</div>-->
+                        <div class="con_right_author"><span v-for="(i, key) in item['article']['contrib_full-name']" :key="key">{{i}}</span></div>
+                        <div class="con_right_journal">{{item['article']['source_source-title_cn']}} <span>{{item['article']['date']}}</span></div>
+              <!--          <PDF ref="pdf"></PDF>-->
+                        <div class="con_right_option">
+              <!--            <PDF ref="pdf" style="display: none"></PDF>-->
+                          <span @click.stop="gotoOption('collect', item['article'], index)"><i class="iconfont iconshoucang"></i>收藏</span>
+                          <span @click.stop="gotoOption('downLoad', item['article'], index)"><i class="iconfont iconxiazai1"></i>下载</span>
+                          <span><i class="iconfont iconfenxiang"></i>分享</span>
+                        </div>
+                      </div>
+                    </div>
+              <p style="text-align: center" v-if="onFetching">loading...</p>
+            </div>
+          </scroller>
+        </div>
+
     <div class="content" ref="content">
 <!--    <div class="content" ref="content" v-show="searchResult.length > 0">-->
       <div>
@@ -34,6 +64,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 <script>
@@ -46,17 +77,27 @@ import wx from 'weixin-js-sdk'
 import pdf from 'vue-pdf'
 import bus from '@/utils/vueBus'
 import _ from 'underscore'
+import { Scroller } from 'vux'
 export default {
-  components: {pdf},
+  components: {pdf,Scroller},
   data () {
     return {
       // searchData: '',
-      loading: false,
-      searchResult: [], // 搜索结果
+
+      searchResult: [], // 单页搜索结果
+      allSearchResult:[], // 所有搜索结果
       historyScroll: null,
       total: '',
+      fromPage:0,
+      onFetching:false
+
+      loading: false,
+     // searchResult: [], // 搜索结果
+      //historyScroll: null,
+     // total: '',
       pdfList: [], // 已经下载过的文件
       existsPdf: [], // 已经下载过的文件里面的某一个属性集合
+
     }
   },
   computed: {
@@ -306,14 +347,6 @@ export default {
         console.log('没', res.data)
       })
     }, 50, true),
-    // getSearchData () {
-      // let that = this
-      // bus.$on('searchData', (data) => {
-      //   that.searchData = data
-      //   console.log('hehheh', that.searchData)
-      //   that.getSearchResult()
-      // })
-    // },
     gotoDetail (val) { // 跳转到论文详情
       this.$router.push({
         path: '/searchDetail',
@@ -322,57 +355,62 @@ export default {
         }
       })
     },
+     onScrollBottom () {
+          if (this.onFetching) {
+            // do nothing
+          } else {
+
+            this.onFetching = true
+            setTimeout(() => {
+              this.fromPage += 10
+              // alert(this.fromPage)  // 每次提醒当前页码
+              this.getSearchResult()
+
+              this.$nextTick(() => {
+                this.$refs.scrollerBottom.reset()
+
+              })
+              this.onFetching = false
+            }, 200)
+          }
+        },
+
     getSearchResult () { // 找到搜索词，进行高亮显示
       searchAll({
-        words: this.searchContent,
-        // from: 11,
+        words: this.searchContent, // 查询字段
+        from: this.fromPage, // 起始页码
         openid: this.openid
       }).then(res => {
         // console.log(res.data)
-        this.total = res.data.total
+        this.total = res.data.total //一共多少条记录
         this.searchResult = res.data.data
+        // 新来的内容放入数组中
+        this.allSearchResult.push.apply(this.allSearchResult,res.data.data)
+
+        //console.log(this.searchResult)
+        //console.log(this.allSearchResult)
         // this.init()
+
+        const that = this // this不断改变，that记录当前this
+        setTimeout(function () { //规定时间后执行该函数
+
         this.loading = false
         const that = this
         setTimeout(function () {
+
           for (const i in that.searchResult) {
             if (that.searchResult[i].favorite_status === 'true') {
               // console.log(11111111111)
               var collList = document.querySelectorAll('.iconshoucang')
               collList[i].style.color = 'red'
-              // collList[i].style.backgroundColor = 'red'
-              // var collList = document.querySelector('.content_right')
-              // console.log(collList)
-              // console.log(111111111)
+
             }
           }
         }, 400)
-        // if (this.searchResult.favorite_status === 'true') {
-        //   console.log(1111111)
-        //   var shouC = document.querySelector('.iconshoucang11')
-        //   console.log(shouC)
-        //   shouC.style.color = 'red'
-        //   // shouC.unbind('click')
-        // }
-        // console.log('搜索词：', this.searchContent)
+
         console.log('搜索词：', res.data)
       })
-      // for (const i in this.historyList) {
-      //   if (this.historyList[i].name.indexOf(this.searchData) > -1) {
-      //     // const a = this.historyList[i].name
-      //     // console.log('1111111', a)
-      //     // a.replace(this.searchData, '333333')
-      //     // const b = '呵呵呵呵哈哈哈哈哈哈黑'
-      //     // const c = b.replace('黑', '345')
-      //     // console.log(c)
-      //     // // a.replace(this.searchData, '<span style="color: red">' + this.searchData + '</span>')
-      //     // console.log('222222222222', a)
-      //     // this.historyList[i].name = a
-      //     this.historyList[i].name = this.historyList[i].name.replace(this.searchData, '<span style="color: red">' + this.searchData + '</span>')
-      //     // console.log('改变了么', a)
-      //     // console.log('改变了么', this.historyList[i].name)
-      //   }
-      // }
+
     },
   }
 }
