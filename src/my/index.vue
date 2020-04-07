@@ -7,38 +7,38 @@
       <div class="my_info_first_info">
 <!--      <div class="my_info_first_info" @click="myInfoDetail">-->
         <div class="user-basic">
-<!--          <img class="user-logo" src="../assets/img/2.png"/>-->
           <img class="user-logo" :src="myInfo.userImg"/>
         </div>
         <div class="user_name_info">
-<!--          <div class="user-name">教育文献情报服务</div>-->
           <div class="user-name">{{myInfo.userName}}</div>
-<!--          <div class="vip-flag">未实名</div>-->
         </div>
 <!--        <div class="user_iconfont">-->
 <!--          <i class="iconfont iconright"></i>-->
 <!--        </div>-->
 <!--        <i class="iconfont icon_luluchangyongtubiao-xianxingdaochu-zhuanqu-"></i>-->
       </div>
-<!--      <div class="my_info_first_item" @click="bindAccount"><i class="iconfont icon_lulurenyuanbangding"></i>绑定账号<i class="iconfont icon_luluchangyongtubiao-xianxingdaochu-zhuanqu-"></i></div>-->
-<!--      <div class="my_info_first_item" @click="myBBS"><i class="iconfont iconquanzi"></i>我的圈子<i class="iconfont iconright"></i></div>-->
-      <div class="my_info_first_item" @click="gotoOption('collect')"><i class="iconfont iconlunwentimu"></i>论文收藏<i class="iconfont iconright"></i></div>
-      <div class="my_info_first_item" @click="gotoOption('SpeCollect')"><i class="iconfont iconshoucang"></i>快报收藏<i class="iconfont iconright"></i></div>
-      <div class="my_info_first_item" @click="gotoOption('myDownLoad')"><i class="iconfont iconxiazai6"></i>资料库<i class="iconfont iconright" style="margin-left: 69%"></i></div>
-      <div class="my_info_first_feedback" @click="gotoOption('ideaFeedback')"><i class="iconfont iconyijianfankui1"></i>意见反馈<i class="iconfont iconright" style="margin-left: 65%"></i></div>
-      <div class="my_info_first_item" @click="gotoOption('aboutUs')"><i class="iconfont iconguanyuwomen1"></i>关于我们<i class="iconfont iconright"></i></div>
-      <div class="my_info_first_item" @click="gotoOption('setInfo')"><i class="iconfont iconshezhi1"></i>设置<i class="iconfont iconright" style="margin-left: 73%"></i></div>
-<!--      <div class="my_info_first_set" @click="gotoOption('setInfo')"><i class="iconfont iconshezhi1"></i>设置<i class="iconfont iconright" style="margin-left: 73%"></i></div>-->
+    </div>
+    <div class="my_info_first_all" ref="my_info_first_all">
+      <div style="padding-bottom: 20px">
+        <div class="my_info_first_item" @click="gotoOption('collect')"><i class="iconfont iconlunwentimu"></i>论文收藏<i class="iconfont iconright"></i></div>
+        <div class="my_info_first_item" @click="gotoOption('SpeCollect')"><i class="iconfont iconshoucang"></i>快报收藏<i class="iconfont iconright"></i></div>
+        <div class="my_info_first_item" @click="gotoOption('myDownLoad')"><i class="iconfont iconxiazai6"></i>资料库<i class="iconfont iconright" style="margin-left: 69%"></i></div>
+        <div class="my_info_first_feedback" @click="gotoOption('ideaFeedback')"><i class="iconfont iconyijianfankui1"></i>意见反馈<i class="iconfont iconright" style="margin-left: 65%"></i></div>
+        <div class="my_info_first_item" @click="gotoOption('aboutUs')"><i class="iconfont iconguanyuwomen1"></i>关于我们<i class="iconfont iconright"></i></div>
+        <div class="my_info_first_item" @click="gotoOption('setInfo')"><i class="iconfont iconshezhi1"></i>设置<i class="iconfont iconright" style="margin-left: 73%"></i></div>
+      </div>
+      <!--      <div class="my_info_first_set" @click="gotoOption('setInfo')"><i class="iconfont iconshezhi1"></i>设置<i class="iconfont iconright" style="margin-left: 73%"></i></div>-->
     </div>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import {getUserInfo} from '../api'
-
+import BScroll from 'better-scroll'
 export default {
   data () {
     return {
+      myScroll: null,
       myInfo: {
         userName: '',
         userImg: ''
@@ -52,8 +52,17 @@ export default {
   },
   mounted () {
     this.getUserInfo()
+    this.init()
   },
   methods: {
+    init () {
+      console.log('初始化：', this.$refs.my_info_first_all)
+      this.$nextTick(() => {
+        this.myScroll = new BScroll(this.$refs.my_info_first_all, {
+          click: true
+        })
+      })
+    },
     getUserInfo () {
       getUserInfo({
         openid: this.openid
@@ -108,6 +117,12 @@ export default {
     flex-direction: column;
     /*background: #f8f8f8;*/
     position: relative;
+  }
+  .my_info_first_all {
+    height: calc(100% - 250px);
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 25px;
   }
 .my_info:after { // 实现背景图片的透明度为0.8
   content: '';
@@ -231,6 +246,7 @@ export default {
   }
   .my_info_first_set {
     padding-left: 20px;
+    padding-bottom: 20px;
     background-color: #fff;
     margin-top: 13px;
     height: 50px;

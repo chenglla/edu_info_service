@@ -8,52 +8,34 @@
       <div class="list-loading" v-if="loading">
         <div class="loader"></div>
       </div>
-      <div v-for="(item, index) in searchResult" :key="index" class="con_info" @click="gotoDetail(item)" v-if="!loading && searchResult.length > 0">
-        <div class="content_left">
-          <i class="iconfont iconpdf"></i>
-          <img :src="item['article']['local_access_pdf_header_href']" alt="" class="con_left_img">
-        </div>
-        <div class="content_right">
-          <div class="con_right_title">{{item['article']['article_article-title']}}</div>
-          <div class="con_right_author"><span v-for="(i, key) in item['article']['contrib_full-name']" :key="key">{{i}}</span></div>
-          <div class="con_right_journal">{{item['article']['source_source-title_cn']}} <span>{{item['article']['date']}}</span></div>
-          <!--          <PDF ref="pdf"></PDF>-->
-          <div class="con_right_option">
-            <!--            <PDF ref="pdf" style="display: none"></PDF>-->
-            <span @click.stop="gotoOption('collect', item['article'], index)"><i class="iconfont iconshoucang"></i>收藏</span>
-            <span @click.stop="gotoOption('downLoad', item['article'], index)"><i class="iconfont iconxiazai1"></i>下载</span>
-            <!--            <span @click.stop="gotoOption('share', item['article'], index)"><i class="iconfont iconfenxiang"></i>分享</span>-->
-          </div>
-        </div>
-      </div>
-<!--      <scroller  v-if="!loading && allSearchResult.length > 0" lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom">-->
-<!--&lt;!&ndash;      <scroller  v-if="!loading && allSearchResult.length > 0" lock-x height="400px" @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offst="5">&ndash;&gt;-->
-<!--            <div class="box2">-->
-<!--              <div v-for="(item, index) in  allSearchResult" :key="index" class="con_info" @click="gotoDetail(item)">-->
-<!--                      <div class="content_left">-->
-<!--                        <i class="iconfont iconpdf"></i>-->
-<!--                        <img :src="item['article']['local_access_pdf_header_href']" alt="" class="con_left_img">-->
-<!--                      </div>-->
-<!--                      <div class="content_right">-->
-<!--              &lt;!&ndash;          <div class="con_right_title">{{item.date}}</div>&ndash;&gt;-->
-<!--              &lt;!&ndash;          <div class="con_right_title">{{item.article_date}}</div>&ndash;&gt;-->
-<!--              &lt;!&ndash;          <div class="con_right_title">{{item.article_article-title_cn}}</div>&ndash;&gt;-->
-<!--                        <div class="con_right_title">{{item['article']['article_article-title']}}</div>-->
-<!--              &lt;!&ndash;          <div class="con_right_title">{{item.article_article-title}}</div>&ndash;&gt;-->
-<!--                        <div class="con_right_author"><span v-for="(i, key) in item['article']['contrib_full-name']" :key="key">{{i}}</span></div>-->
-<!--                        <div class="con_right_journal">{{item['article']['source_source-title_cn']}} <span>{{item['article']['date']}}</span></div>-->
-<!--              &lt;!&ndash;          <PDF ref="pdf"></PDF>&ndash;&gt;-->
-<!--                        <div class="con_right_option">-->
-<!--              &lt;!&ndash;            <PDF ref="pdf" style="display: none"></PDF>&ndash;&gt;-->
-<!--                          <span @click.stop="gotoOption('collect', item['article'], index)"><i class="iconfont iconshoucang"></i>收藏</span>-->
-<!--                          <span @click.stop="gotoOption('downLoad', item['article'], index)"><i class="iconfont iconxiazai1"></i>下载</span>-->
-<!--&lt;!&ndash;                          <span><i class="iconfont iconfenxiang"></i>分享</span>&ndash;&gt;-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--              <p style="text-align: center;margin: 8px;color: #9c9c9c" v-if="onFetching">加载中...</p>-->
-<!--            </div>-->
-<!--          </scroller>-->
+      <scroller  v-if="!loading && allSearchResult.length > 0" lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom">
+<!--      <scroller  v-if="!loading && allSearchResult.length > 0" lock-x height="400px" @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offst="5">-->
+            <div class="box2">
+              <div v-for="(item, index) in  allSearchResult" :key="index" class="con_info" @click="gotoDetail(item)">
+                      <div class="content_left">
+                        <i class="iconfont iconpdf"></i>
+                        <img :src="item['article']['local_access_pdf_header_href']" alt="" class="con_left_img">
+                      </div>
+                      <div class="content_right">
+              <!--          <div class="con_right_title">{{item.date}}</div>-->
+              <!--          <div class="con_right_title">{{item.article_date}}</div>-->
+              <!--          <div class="con_right_title">{{item.article_article-title_cn}}</div>-->
+                        <div class="con_right_title">{{item['article']['article_article-title']}}</div>
+              <!--          <div class="con_right_title">{{item.article_article-title}}</div>-->
+                        <div class="con_right_author"><span v-for="(i, key) in item['article']['contrib_full-name']" :key="key">{{i}}</span></div>
+                        <div class="con_right_journal">{{item['article']['source_source-title_cn']}} <span>{{item['article']['date']}}</span></div>
+              <!--          <PDF ref="pdf"></PDF>-->
+                        <div class="con_right_option">
+              <!--            <PDF ref="pdf" style="display: none"></PDF>-->
+                          <span @click.stop="gotoOption('collect', item['article'], index)"><i class="iconfont iconshoucang"></i>收藏</span>
+                          <span @click.stop="gotoOption('downLoad', item['article'], index)"><i class="iconfont iconxiazai1"></i>下载</span>
+<!--                          <span><i class="iconfont iconfenxiang"></i>分享</span>-->
+                        </div>
+                      </div>
+                    </div>
+              <p style="text-align: center;margin: 8px;color: #9c9c9c" v-if="onFetching">加载中...</p>
+            </div>
+          </scroller>
     </div>
 
 <!--    <div class="content" ref="content">-->
@@ -101,28 +83,25 @@ export default {
   data () {
     return {
       // searchData: '',
+
       searchResult: [], // 单页搜索结果
       allSearchResult: [], // 所有搜索结果
       historyScroll: null,
       total: '',
-      // fromPage: 0,
+      fromPage: 0,
       onFetching: false,
+
       loading: false,
       // searchResult: [], // 搜索结果
       // historyScroll: null,
       // total: '',
       pdfList: [], // 已经下载过的文件
       existsPdf: [], // 已经下载过的文件里面的某一个属性集合
-      scrollTop: '',
-      scrollY: '',
+
     }
-  },
-  props: {
-    page: Number
   },
   computed: {
     showImg () {
-      // console.log(this.$store.state.infoService.showImg === false)
       return this.$store.state.infoService.showImg
     },
     searchContent () {
@@ -162,14 +141,10 @@ export default {
   // },
   mounted () {
     // this.init()
-    this.getDownloadArticleList() // 获取已经库里已经存在的下载文件
     this.clearQuery()
     this.loading = true
     this.getSearchResult()
-    // window.addEventListener('scroll', this.init, true)
-    // if (this.showImg === false) {
-    //   this.init()
-    // }
+    this.getDownloadArticleList() // 获取已经库里已经存在的下载文件
     // this.getSign()
     // this.$router.afterEach((to, from, next) => {
     //   window.scrollTo(0, 0)
@@ -180,70 +155,6 @@ export default {
   //   bus.$off('searchData')
   // },
   methods: {
-    // init () {
-    //   this.$nextTick(() => {
-    //     // const start = this.scrollTop || 0
-    //     console.log(window)
-    //     if (this.historyScroll) {
-    //       this.historyScroll.refresh()
-    //     } else {
-    //       // this.historyScroll = new BScroll(this.$refs.content, {
-    //       //   probeType: 3,
-    //       //   click: true
-    //       // })
-    //       this.historyScroll = new BScroll(this.$refs.content, {
-    //         scrollY: true,
-    //         click: true,
-    //         probeType: 3,
-    //         pullDownRefresh: true,
-    //         // pullDownRefresh: {
-    //         //   // type: true,
-    //         //   threshold: 10,
-    //         //   stop: 10
-    //         // },
-    //         pullUpLoad: {
-    //           threshold: 0,
-    //           moreTxt: '加载中',
-    //           noMoreTxt: '没有更多数据了'
-    //         }
-    //       })
-    //       // console.log(4444444)
-    //       this.historyScroll.on('scroll', (pos) => {
-    //         // console.log(window)
-    //         this.scrollY = Math.abs(Math.round(pos.y))
-    //         console.log(this.scrollY)
-    //         // console.log(window.scrollTop())
-    //         // console.log('上滑')
-    //       })
-    //       // console.log(111111)
-    //       this.historyScroll.on('pullingUp', () => {
-    //         alert(111111111)
-    //         console.log(22222222222)
-    //         this.$nextTick(() => {
-    //           this.historyScroll.finishPullUp()
-    //         })
-    //         // if (!this.loading) {
-    //         // // if (!this.end && !this.loading) {
-    //         //   console.log('上滑')
-    //         //   // this.nextPage()
-    //         //   this.$nextTick(() => {
-    //         //     this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
-    //         //     this.historyScroll && this.historyScroll.finishPullUp()
-    //         //   })
-    //         // }
-    //       })
-    //       this.historyScroll.on('pullingDown', () => {
-    //         // this.reList()
-    //         alert(11222222)
-    //         console.log('下滑')
-    //         this.$nextTick(() => {
-    //           this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
-    //           this.historyScroll && this.historyScroll.finishPullDown()
-    //         })
-    //       })
-    //     }
-    //   })
-    // },
     init () {
       this.$nextTick(() => {
         this.historyScroll = new BScroll(this.$refs.content, {
@@ -255,7 +166,7 @@ export default {
       this.allSearchResult = []
       this.searchResult = []
       this.total = ''
-      this.page = 0
+      this.fromPage = 0
       this.loading = true
     },
     getDownloadArticleList () { // 获取下载过的文件
@@ -446,57 +357,43 @@ export default {
         }
       })
     },
-    // onScrollBottom () {
-    //   if (this.onFetching) {
-    //     // do nothing
-    //   } else {
-    //     this.onFetching = true
-    //     setTimeout(() => {
-    //       this.fromPage += 10
-    //       // alert(this.fromPage)  // 每次提醒当前页码
-    //       this.getSearchResult()
-    //
-    //       this.$nextTick(() => {
-    //         this.$refs.scrollerBottom.reset()
-    //
-    //       })
-    //       this.onFetching = false
-    //     }, 200)
-    //   }
-    // },
+    onScrollBottom () {
+      if (this.onFetching) {
+        // do nothing
+      } else {
+
+        this.onFetching = true
+        setTimeout(() => {
+          this.fromPage += 10
+          // alert(this.fromPage)  // 每次提醒当前页码
+          this.getSearchResult()
+
+          this.$nextTick(() => {
+            this.$refs.scrollerBottom.reset()
+
+          })
+          this.onFetching = false
+        }, 200)
+      }
+    },
 
     getSearchResult () { // 找到搜索词，进行高亮显示
-      // alert(this.page)
-      console.log('page:', this.page)
       searchAll({
         words: this.searchContent, // 查询字段
-        from: this.page, // 起始页码
+        from: this.fromPage, // 起始页码
         openid: this.openid
       }).then(res => {
-        this.loading = false
         // console.log(res.data)
         this.total = res.data.total // 一共多少条记录
-        // this.searchResult = res.data.data
-        // this.$nextTick(() => {
-        //   this.historyScroll && this.historyScroll.refresh()
-        // })
+        this.searchResult = res.data.data
         // 新来的内容放入数组中
-        const uuidList = this.searchResult.map(item => item['article']['uuid'])
-        res.data.data.map(item => {
-          if (uuidList.indexOf(item['article']['uuid']) === -1) {
-            this.searchResult.push(item)
-          }
-        })
-        this.init()
-        // this.allSearchResult.push.apply(this.allSearchResult, res.data.data)
+        this.allSearchResult.push.apply(this.allSearchResult, res.data.data)
         // console.log(this.searchResult)
         // console.log(this.allSearchResult)
-        // this.$nextTick(() => {
-        //   this.$refs.content.historyScroll && this.$refs.content.historyScroll.refresh()
-        // })
+        // this.init()
         const that = this // this不断改变，that记录当前this
         // setTimeout(function () { //规定时间后执行该函数
-        // this.loading = false
+        this.loading = false
         // const that = this
         setTimeout(function () {
           for (const i in that.searchResult) {
@@ -506,7 +403,6 @@ export default {
               collList[i].style.color = 'red'
             }
           }
-          // that.init()
         }, 400)
         console.log('搜索词：', res.data)
         // })

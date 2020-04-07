@@ -8,7 +8,7 @@
     <div class="home_content" ref="homeWrapper">
       <div>
         <four v-show="showImg"></four>
-        <five v-show="!showImg" ref="list" :page="page"></five>
+        <five v-show="!showImg"></five>
       </div>
     </div>
   </div>
@@ -30,7 +30,6 @@ export default {
       // showImg: true
       // showImg: false, // 是否展示全文检索图片
       searchContent: '', // 搜索内容
-      page: 0
     }
   },
   watch: {
@@ -53,9 +52,6 @@ export default {
   mounted () {
     this.getInitialData()
     this.init()
-    // this.$nextTick(() => {
-    //   this.$refs.list.init()
-    // })
     // this.$router.afterEach((to, from, next) => {
     //   window.scrollTo(0, 0)
     // })
@@ -65,70 +61,9 @@ export default {
   methods: {
     init () {
       this.$nextTick(() => {
-        // this.homeScroll = new BScroll(this.$refs.homeWrapper, {
-        //   click: true
-        // })
-        console.log(window)
-        if (this.homeScroll) {
-          this.homeScroll.refresh()
-        } else {
-          // this.historyScroll = new BScroll(this.$refs.content, {
-          //   probeType: 3,
-          //   click: true
-          // })
-          this.homeScroll = new BScroll(this.$refs.homeWrapper, {
-            scrollY: true,
-            click: true,
-            probeType: 3,
-            // pullDownRefresh: true,
-            pullDownRefresh: {
-              // type: true,
-              threshold: 40,
-              stop: 20
-            },
-            pullUpLoad: {
-              threshold: 30,
-              moreTxt: '加载中',
-              noMoreTxt: '没有更多数据了'
-            }
-          })
-          // console.log(4444444)
-          // this.homeScroll.on('scroll', (pos) => {
-          //   // console.log(window)
-          //   this.scrollY = Math.abs(Math.round(pos.y))
-          //   console.log(this.scrollY)
-          //   // console.log(window.scrollTop())
-          //   console.log('滑动')
-          // })
-          // console.log(111111)
-          this.homeScroll.on('pullingUp', () => {
-            // alert(111111111)
-            console.log('上滑')
-            this.page += 10
-            this.$refs.list.getSearchResult()
-            this.$nextTick(() => {
-              this.homeScroll.finishPullUp()
-            })
-            // if (!this.loading) {
-            // // if (!this.end && !this.loading) {
-            //   console.log('上滑')
-            //   // this.nextPage()
-            //   this.$nextTick(() => {
-            //     this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
-            //     this.historyScroll && this.historyScroll.finishPullUp()
-            //   })
-            // }
-          })
-          this.homeScroll.on('pullingDown', () => {
-            // this.reList()
-            // alert(11222222)
-            console.log('下滑')
-            this.$nextTick(() => {
-              this.homeScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
-              this.homeScroll && this.homeScroll.finishPullDown()
-            })
-          })
-        }
+        this.homeScroll = new BScroll(this.$refs.homeWrapper, {
+          click: true
+        })
       })
     },
     getInitialData () {

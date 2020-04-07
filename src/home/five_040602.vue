@@ -105,7 +105,7 @@ export default {
       allSearchResult: [], // 所有搜索结果
       historyScroll: null,
       total: '',
-      // fromPage: 0,
+      fromPage: 0,
       onFetching: false,
       loading: false,
       // searchResult: [], // 搜索结果
@@ -113,16 +113,11 @@ export default {
       // total: '',
       pdfList: [], // 已经下载过的文件
       existsPdf: [], // 已经下载过的文件里面的某一个属性集合
-      scrollTop: '',
-      scrollY: '',
+      scrollTop: ''
     }
-  },
-  props: {
-    page: Number
   },
   computed: {
     showImg () {
-      // console.log(this.$store.state.infoService.showImg === false)
       return this.$store.state.infoService.showImg
     },
     searchContent () {
@@ -166,10 +161,7 @@ export default {
     this.clearQuery()
     this.loading = true
     this.getSearchResult()
-    // window.addEventListener('scroll', this.init, true)
-    // if (this.showImg === false) {
-    //   this.init()
-    // }
+    this.init()
     // this.getSign()
     // this.$router.afterEach((to, from, next) => {
     //   window.scrollTo(0, 0)
@@ -180,82 +172,63 @@ export default {
   //   bus.$off('searchData')
   // },
   methods: {
-    // init () {
-    //   this.$nextTick(() => {
-    //     // const start = this.scrollTop || 0
-    //     console.log(window)
-    //     if (this.historyScroll) {
-    //       this.historyScroll.refresh()
-    //     } else {
-    //       // this.historyScroll = new BScroll(this.$refs.content, {
-    //       //   probeType: 3,
-    //       //   click: true
-    //       // })
-    //       this.historyScroll = new BScroll(this.$refs.content, {
-    //         scrollY: true,
-    //         click: true,
-    //         probeType: 3,
-    //         pullDownRefresh: true,
-    //         // pullDownRefresh: {
-    //         //   // type: true,
-    //         //   threshold: 10,
-    //         //   stop: 10
-    //         // },
-    //         pullUpLoad: {
-    //           threshold: 0,
-    //           moreTxt: '加载中',
-    //           noMoreTxt: '没有更多数据了'
-    //         }
-    //       })
-    //       // console.log(4444444)
-    //       this.historyScroll.on('scroll', (pos) => {
-    //         // console.log(window)
-    //         this.scrollY = Math.abs(Math.round(pos.y))
-    //         console.log(this.scrollY)
-    //         // console.log(window.scrollTop())
-    //         // console.log('上滑')
-    //       })
-    //       // console.log(111111)
-    //       this.historyScroll.on('pullingUp', () => {
-    //         alert(111111111)
-    //         console.log(22222222222)
-    //         this.$nextTick(() => {
-    //           this.historyScroll.finishPullUp()
-    //         })
-    //         // if (!this.loading) {
-    //         // // if (!this.end && !this.loading) {
-    //         //   console.log('上滑')
-    //         //   // this.nextPage()
-    //         //   this.$nextTick(() => {
-    //         //     this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
-    //         //     this.historyScroll && this.historyScroll.finishPullUp()
-    //         //   })
-    //         // }
-    //       })
-    //       this.historyScroll.on('pullingDown', () => {
-    //         // this.reList()
-    //         alert(11222222)
-    //         console.log('下滑')
-    //         this.$nextTick(() => {
-    //           this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
-    //           this.historyScroll && this.historyScroll.finishPullDown()
-    //         })
-    //       })
-    //     }
-    //   })
-    // },
     init () {
       this.$nextTick(() => {
+        // const start = this.scrollTop || 0
+        // console.log(start)
         this.historyScroll = new BScroll(this.$refs.content, {
-          click: true
+          // scrollY: true,
+          // startY: start,
+          click: true,
+          // probeType: 3,
+          pullDownRefresh: {
+            threshold: 10,
+            stop: 10
+          },
+          pullUpLoad: {
+            threshold: 0,
+            moreTxt: '加载中',
+            noMoreTxt: '没有更多数据了'
+          }
+        })
+        console.log(4444444)
+        this.historyScroll.on('pullingUp', (pos) => {
+          console.log('上滑')
+          this.$nextTick(() => {
+            this.historyScroll.finishPullUp()
+          })
+          // if (!this.loading) {
+          // // if (!this.end && !this.loading) {
+          //   console.log('上滑')
+          //   // this.nextPage()
+          //   this.$nextTick(() => {
+          //     this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
+          //     this.historyScroll && this.historyScroll.finishPullUp()
+          //   })
+          // }
+        })
+        this.historyScroll.on('pullingDown', () => {
+          // this.reList()
+          console.log('下滑')
+          this.$nextTick(() => {
+            this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
+            this.historyScroll && this.historyScroll.finishPullDown()
+          })
         })
       })
     },
+    // init () {
+    //   this.$nextTick(() => {
+    //     this.historyScroll = new BScroll(this.$refs.content, {
+    //       click: true
+    //     })
+    //   })
+    // },
     clearQuery () {
       this.allSearchResult = []
       this.searchResult = []
       this.total = ''
-      this.page = 0
+      this.fromPage = 0
       this.loading = true
     },
     getDownloadArticleList () { // 获取下载过的文件
@@ -446,31 +419,29 @@ export default {
         }
       })
     },
-    // onScrollBottom () {
-    //   if (this.onFetching) {
-    //     // do nothing
-    //   } else {
-    //     this.onFetching = true
-    //     setTimeout(() => {
-    //       this.fromPage += 10
-    //       // alert(this.fromPage)  // 每次提醒当前页码
-    //       this.getSearchResult()
-    //
-    //       this.$nextTick(() => {
-    //         this.$refs.scrollerBottom.reset()
-    //
-    //       })
-    //       this.onFetching = false
-    //     }, 200)
-    //   }
-    // },
+    onScrollBottom () {
+      if (this.onFetching) {
+        // do nothing
+      } else {
+        this.onFetching = true
+        setTimeout(() => {
+          this.fromPage += 10
+          // alert(this.fromPage)  // 每次提醒当前页码
+          this.getSearchResult()
+
+          this.$nextTick(() => {
+            this.$refs.scrollerBottom.reset()
+
+          })
+          this.onFetching = false
+        }, 200)
+      }
+    },
 
     getSearchResult () { // 找到搜索词，进行高亮显示
-      // alert(this.page)
-      console.log('page:', this.page)
       searchAll({
         words: this.searchContent, // 查询字段
-        from: this.page, // 起始页码
+        from: this.fromPage, // 起始页码
         openid: this.openid
       }).then(res => {
         this.loading = false
@@ -480,14 +451,13 @@ export default {
         // this.$nextTick(() => {
         //   this.historyScroll && this.historyScroll.refresh()
         // })
+        // this.init()
         // 新来的内容放入数组中
-        const uuidList = this.searchResult.map(item => item['article']['uuid'])
         res.data.data.map(item => {
-          if (uuidList.indexOf(item['article']['uuid']) === -1) {
-            this.searchResult.push(item)
-          }
+          // if (schoolCode.indexOf(item.schoolcode) === -1) {
+          this.searchResult.push(item)
+          // }
         })
-        this.init()
         // this.allSearchResult.push.apply(this.allSearchResult, res.data.data)
         // console.log(this.searchResult)
         // console.log(this.allSearchResult)
@@ -508,6 +478,9 @@ export default {
           }
           // that.init()
         }, 400)
+        this.$nextTick(() => {
+          this.historyScroll && this.historyScroll.refresh()
+        })
         console.log('搜索词：', res.data)
         // })
       })

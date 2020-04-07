@@ -65,7 +65,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
   /*头部标题*/
   .collect_info {
     height: 100%;
