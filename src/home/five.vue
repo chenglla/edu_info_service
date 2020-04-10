@@ -475,7 +475,7 @@ export default {
         from: this.page, // 起始页码
         openid: this.openid
       }).then(res => {
-        alert(1000+this.page)
+        //alert(1000+this.page)
         this.loading = false
         // console.log(res.data)
         this.total = res.data.total // 一共多少条记录
