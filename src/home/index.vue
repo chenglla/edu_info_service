@@ -111,7 +111,7 @@ export default {
                this.page=0
               }
 
-              alert(this.page)
+              //alert(this.page)
               this.$refs.list.getSearchResult()
               this.$nextTick(() => {
                 this.homeScroll.finishPullUp()
