@@ -26,6 +26,7 @@
           </div>
         </div>
       </div>
+      <div style="text-align: center;margin: 10px;" v-if="total<10||page>total" >到底了...</div>
 <!--      <scroller  v-if="!loading && allSearchResult.length > 0" lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom">-->
 <!--&lt;!&ndash;      <scroller  v-if="!loading && allSearchResult.length > 0" lock-x height="400px" @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offst="5">&ndash;&gt;-->
 <!--            <div class="box2">-->
@@ -165,6 +166,7 @@ export default {
     this.getDownloadArticleList() // 获取已经库里已经存在的下载文件
     this.clearQuery()
     this.loading = true
+    //查看详情，退回之后用
     this.getSearchResult()
     // window.addEventListener('scroll', this.init, true)
     // if (this.showImg === false) {
@@ -473,6 +475,7 @@ export default {
         from: this.page, // 起始页码
         openid: this.openid
       }).then(res => {
+        alert(1000+this.page)
         this.loading = false
         // console.log(res.data)
         this.total = res.data.total // 一共多少条记录
