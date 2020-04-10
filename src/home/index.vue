@@ -100,15 +100,23 @@ export default {
           //   // console.log(window.scrollTop())
           //   console.log('滑动')
           // })
-          // console.log(111111)
+
           this.homeScroll.on('pullingUp', () => {
-            // alert(111111111)
-            console.log('上滑')
-            this.page += 10
-            this.$refs.list.getSearchResult()
-            this.$nextTick(() => {
-              this.homeScroll.finishPullUp()
-            })
+            if(this.$refs.list.total===''||this.page<this.$refs.list.total||this.page===0){
+            // this.page 会取整，例如total=67，page会停在70
+
+              console.log('上滑')
+              this.page += 10
+              if(this.$refs.list.total===''){
+               this.page=0
+              }
+
+              alert(this.page)
+              this.$refs.list.getSearchResult()
+              this.$nextTick(() => {
+                this.homeScroll.finishPullUp()
+              })
+            }
             // if (!this.loading) {
             // // if (!this.end && !this.loading) {
             //   console.log('上滑')
@@ -120,8 +128,6 @@ export default {
             // }
           })
           this.homeScroll.on('pullingDown', () => {
-            // this.reList()
-            // alert(11222222)
             console.log('下滑')
             this.$nextTick(() => {
               this.homeScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
