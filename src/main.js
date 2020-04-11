@@ -8,12 +8,13 @@ import vueTap from 'vue-js-tap'
 // import FastClick from 'fastclick'
 import axios from 'axios'
 import store from './store'
-import { Search, Popup, Popover, Toast, ToastPlugin } from 'vux'
+import { Search, Popup, Popover, Toast, ToastPlugin, LoadingPlugin } from 'vux'
 import Meta from 'vue-meta'
 import wx from 'weixin-js-sdk'
 global.wx = wx
 Vue.use(Meta)
 Vue.use(ToastPlugin)
+Vue.use(LoadingPlugin)
 Vue.component('popup', Popup)
 Vue.component('popover', Popover)
 Vue.component('search', Search)

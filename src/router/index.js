@@ -17,10 +17,12 @@ const share = () => import('@/home/share') // 分享论文
 // const usePdf = () => import('@/components/usePdf')
 const SpeCollect = () => import('@/my/SpeCollect')
 const searchDetail = () => import('@/home/search/searchDetail') // 搜索详情
+const searchInfo = () => import('@/home/search/searchInfo') // 搜索详情
 const specialExpress = () => import('@/specialExpress/index') // 专题快报首页
 const speExpDetail = () => import('@/specialExpress/speExpDetail') // 专题快报详情
 const ideaFeedback = () => import('@/my/ideaFeedback')
 const aboutUs = () => import('@/my/aboutUs')
+const scanCode = () => import('@/home/scanCode') // 扫码
 
 export default new Router({
   routes: [
@@ -87,12 +89,29 @@ export default new Router({
       meta: { tab: 'SpeCollect', title: 'SpeCollect' }
     },
     {
+      path: '/scanCode',
+      // path: '/share/:exam_name',
+      components: {
+        default: scanCode
+      },
+      name: 'scanCode',
+      meta: { tab: 'scanCode', title: 'scanCode' }
+    },
+    {
       path: '/searchDetail',
       components: {
         default: searchDetail, nav: nav
       },
       name: 'searchDetail',
       meta: { tab: 'searchDetail', title: 'searchDetail' }
+    },
+    {
+      path: '/searchInfo',
+      components: {
+        default: searchInfo, nav: nav
+      },
+      name: 'searchInfo',
+      meta: { tab: 'searchInfo', title: 'searchInfo' }
     },
     {
       path: '/specialExpress',

@@ -97,6 +97,11 @@ export default {
         words: this.searchContent
       }).then(res => {
         if (res.data.errno === 0) {
+          if (this.showImg === true) {
+            a.style.cssText = 'background-color: #fff;color: #3c3c3c;box-shadow: 0 3px 2px 1px rgba(0, 0, 0 , 0.3);display: block;top: 195px;left: 9%;width: 82%;'
+          } else {
+            a.style.cssText = 'background-color: #fff;color: #3c3c3c;box-shadow: 0 3px 2px 1px rgba(0, 0, 0 , 0.3);display: block;top: 100px;left: 9%;width: 82%;'
+          }
           this.searchHistory = res.data.list
           if (this.searchHistory.length === 0) {
             a.style.display = 'none'
@@ -115,11 +120,18 @@ export default {
       if (this.searchContent === '') {
         console.log('搜索内容为空')
       } else {
-        this.$store.commit('SET_SHOW_IMG', false)
         this.$store.commit('SET_SEARCH_DATA', this.searchContent)
+        this.$router.push({
+          name: 'searchInfo',
+          query: {
+            searchContent: this.searchContent
+          }
+        })
+        // this.$store.commit('SET_SHOW_IMG', false)
       }
     },
     getSearchHistory () { // 获取搜索历史
+      console.log(77777777777)
       var a = document.querySelector('.vux-popover')
       getSearchHistory({
         openid: this.openid
@@ -174,6 +186,7 @@ export default {
 </script>
 <style scoped lang="scss">
   .third_info {
+    z-index: 1;
     padding-top: 15px;
     background-color: #fff;
     padding-bottom: 15px;

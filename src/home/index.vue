@@ -2,13 +2,16 @@
   <div class="home-page">
 <!--  <div class="home-page" ref="homeWrapper">-->
     <first></first>
-    <second v-if="showImg"></second>
+    <second></second>
+<!--    <second v-if="showImg"></second>-->
     <third></third>
 <!--    <third @funcshow="show"></third>-->
     <div class="home_content" ref="homeWrapper">
       <div>
-        <four v-show="showImg"></four>
-        <five v-show="!showImg" ref="list" :page="page"></five>
+        <four></four>
+<!--        <four v-show="showImg"></four>-->
+<!--        <five v-show="!showImg" ref="list" :page="page" @nextPage="nextPage"></five>-->
+<!--        <five v-show="!showImg" ref="list" :page="page"></five>-->
       </div>
     </div>
   </div>
@@ -29,28 +32,30 @@ export default {
       key: '',
       // showImg: true
       // showImg: false, // 是否展示全文检索图片
-      searchContent: '', // 搜索内容
+      // searchContent: '', // 搜索内容
       page: 0
     }
   },
-  watch: {
-    showImg () {
-      var divScroll = document.getElementsByClassName('home_content')[0]
-      if (this.showImg !== '') {
-        if (this.showImg === false) {
-          divScroll.className = 'home_content five'
-        } else if (this.showImg === true) {
-          divScroll.className = 'home_content four'
-        }
-      }
-    }
-  },
-  computed: {
-    showImg () {
-      return this.$store.state.infoService.showImg
-    }
-  },
+  // watch: {
+  //   showImg () {
+  //     console.log('hahahahah')
+  //     const divScroll = document.getElementsByClassName('home_content')[0]
+  //     if (this.showImg !== '') {
+  //       if (this.showImg === false) {
+  //         divScroll.className = 'home_content five'
+  //       } else if (this.showImg === true) {
+  //         divScroll.className = 'home_content four'
+  //       }
+  //     }
+  //   }
+  // },
+  // computed: {
+  //   showImg () {
+  //     return this.$store.state.infoService.showImg
+  //   }
+  // },
   mounted () {
+    this.$store.commit('SET_SHOW_IMG', true)
     this.getInitialData()
     this.init()
     // this.$nextTick(() => {
@@ -65,76 +70,76 @@ export default {
   methods: {
     init () {
       this.$nextTick(() => {
-        // this.homeScroll = new BScroll(this.$refs.homeWrapper, {
-        //   click: true
-        // })
-        console.log(window)
-        if (this.homeScroll) {
-          this.homeScroll.refresh()
-        } else {
-          // this.historyScroll = new BScroll(this.$refs.content, {
-          //   probeType: 3,
-          //   click: true
-          // })
-          this.homeScroll = new BScroll(this.$refs.homeWrapper, {
-            scrollY: true,
-            click: true,
-            probeType: 3,
-            // pullDownRefresh: true,
-            pullDownRefresh: {
-              // type: true,
-              threshold: 40,
-              stop: 20
-            },
-            pullUpLoad: {
-              threshold: 30,
-              moreTxt: '加载中',
-              noMoreTxt: '没有更多数据了'
-            }
-          })
-          // console.log(4444444)
-          // this.homeScroll.on('scroll', (pos) => {
-          //   // console.log(window)
-          //   this.scrollY = Math.abs(Math.round(pos.y))
-          //   console.log(this.scrollY)
-          //   // console.log(window.scrollTop())
-          //   console.log('滑动')
-          // })
-
-          this.homeScroll.on('pullingUp', () => {
-            if(this.$refs.list.total===''||this.page<this.$refs.list.total||this.page===0){
-            // this.page 会取整，例如total=67，page会停在70
-
-              console.log('上滑')
-              this.page += 10
-              if(this.$refs.list.total===''){
-               this.page=0
-              }
-
-              //alert(this.page)
-              this.$refs.list.getSearchResult()
-              this.$nextTick(() => {
-                this.homeScroll.finishPullUp()
-              })
-            }
-            // if (!this.loading) {
-            // // if (!this.end && !this.loading) {
-            //   console.log('上滑')
-            //   // this.nextPage()
-            //   this.$nextTick(() => {
-            //     this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
-            //     this.historyScroll && this.historyScroll.finishPullUp()
-            //   })
-            // }
-          })
-          this.homeScroll.on('pullingDown', () => {
-            console.log('下滑')
-            this.$nextTick(() => {
-              this.homeScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
-              this.homeScroll && this.homeScroll.finishPullDown()
-            })
-          })
-        }
+        this.homeScroll = new BScroll(this.$refs.homeWrapper, {
+          click: true
+        })
+        // console.log(window)
+        // if (this.homeScroll) {
+        //   this.homeScroll.refresh()
+        // } else {
+        //   // this.historyScroll = new BScroll(this.$refs.content, {
+        //   //   probeType: 3,
+        //   //   click: true
+        //   // })
+        //   this.homeScroll = new BScroll(this.$refs.homeWrapper, {
+        //     scrollY: true,
+        //     click: true,
+        //     probeType: 3,
+        //     // pullDownRefresh: true,
+        //     pullDownRefresh: {
+        //       // type: true,
+        //       threshold: 40,
+        //       stop: 20
+        //     },
+        //     pullUpLoad: {
+        //       threshold: 30,
+        //       moreTxt: '加载中',
+        //       noMoreTxt: '没有更多数据了'
+        //     }
+        //   })
+        //   // console.log(4444444)
+        //   // this.homeScroll.on('scroll', (pos) => {
+        //   //   // console.log(window)
+        //   //   this.scrollY = Math.abs(Math.round(pos.y))
+        //   //   console.log(this.scrollY)
+        //   //   // console.log(window.scrollTop())
+        //   //   console.log('滑动')
+        //   // })
+        //
+        //   this.homeScroll.on('pullingUp', () => {
+        //     if (this.$refs.list.total === '' || this.page < this.$refs.list.total || this.page === 0) {
+        //       // this.page 会取整，例如total=67，page会停在70
+        //
+        //       console.log('上滑')
+        //       this.page += 10
+        //       if (this.$refs.list.total === '') {
+        //         this.page = 0
+        //       }
+        //
+        //       // alert(this.page)
+        //       this.$refs.list.getSearchResult()
+        //       this.$nextTick(() => {
+        //         this.homeScroll.finishPullUp()
+        //       })
+        //     }
+        //     // if (!this.loading) {
+        //     // // if (!this.end && !this.loading) {
+        //     //   console.log('上滑')
+        //     //   // this.nextPage()
+        //     //   this.$nextTick(() => {
+        //     //     this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
+        //     //     this.historyScroll && this.historyScroll.finishPullUp()
+        //     //   })
+        //     // }
+        //   })
+        //   this.homeScroll.on('pullingDown', () => {
+        //     console.log('下滑')
+        //     this.$nextTick(() => {
+        //       this.homeScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
+        //       this.homeScroll && this.homeScroll.finishPullDown()
+        //     })
+        //   })
+        // }
       })
     },
     getInitialData () {
@@ -166,7 +171,7 @@ export default {
     /*background: #fff;*/
   }
   .home_content {
-    /*height: calc(100% - 150px);*/
+    height: calc(100% - 250px);
     overflow: hidden;
   }
   .four {

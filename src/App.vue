@@ -63,7 +63,7 @@ export default {
             timestamp: res.data.data.timestamp,
             nonceStr: res.data.data.nonceStr,
             signature: res.data.data.signature,
-            jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
+            jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData', 'scanQRCode']
           })
           // wx.ready(() => {
           //   wx.updateAppMessageShareData(share)

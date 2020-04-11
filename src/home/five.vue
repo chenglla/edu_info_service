@@ -26,7 +26,8 @@
           </div>
         </div>
       </div>
-      <div style="text-align: center;margin: 10px;" v-if="total<10||page>total" >到底了...</div>
+
+      <div style="text-align: center;margin: 10px;" v-if="(!loading && total<10) || (!loading && page>total)" >到底了...</div>
 <!--      <scroller  v-if="!loading && allSearchResult.length > 0" lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom">-->
 <!--&lt;!&ndash;      <scroller  v-if="!loading && allSearchResult.length > 0" lock-x height="400px" @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" :scroll-bottom-offst="5">&ndash;&gt;-->
 <!--            <div class="box2">-->
@@ -166,7 +167,7 @@ export default {
     this.getDownloadArticleList() // 获取已经库里已经存在的下载文件
     this.clearQuery()
     this.loading = true
-    //查看详情，退回之后用
+    // 查看详情，退回之后用
     this.getSearchResult()
     // window.addEventListener('scroll', this.init, true)
     // if (this.showImg === false) {
@@ -246,11 +247,78 @@ export default {
     //     }
     //   })
     // },
+    // init () {
+    //   this.$nextTick(() => {
+    //     this.historyScroll = new BScroll(this.$refs.content, {
+    //       click: true
+    //     })
+    //   })
+    // },
     init () {
       this.$nextTick(() => {
-        this.historyScroll = new BScroll(this.$refs.content, {
-          click: true
-        })
+        console.log(window)
+        if (this.historyScroll) {
+          this.historyScroll.refresh()
+        } else {
+          this.historyScroll = new BScroll(this.$refs.content, {
+            scrollY: true,
+            click: true,
+            probeType: 3,
+            // pullDownRefresh: true,
+            pullDownRefresh: {
+              // type: true,
+              threshold: 40,
+              stop: 20
+            },
+            pullUpLoad: {
+              threshold: 30,
+              moreTxt: '加载中',
+              noMoreTxt: '没有更多数据了'
+            }
+          })
+          // console.log(4444444)
+          // this.homeScroll.on('scroll', (pos) => {
+          //   // console.log(window)
+          //   this.scrollY = Math.abs(Math.round(pos.y))
+          //   console.log(this.scrollY)
+          //   // console.log(window.scrollTop())
+          //   console.log('滑动')
+          // })
+
+          this.historyScroll.on('pullingUp', () => {
+            if (this.total === '' || this.page < this.total || this.page === 0) {
+              // this.page 会取整，例如total=67，page会停在70
+
+              console.log('上滑')
+              this.page += 10
+              if (this.total === '') {
+                this.page = 0
+              }
+
+              // alert(this.page)
+              this.$refs.list.getSearchResult()
+              this.$nextTick(() => {
+                this.historyScroll.finishPullUp()
+              })
+            }
+            // if (!this.loading) {
+            // // if (!this.end && !this.loading) {
+            //   console.log('上滑')
+            //   // this.nextPage()
+            //   this.$nextTick(() => {
+            //     this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
+            //     this.historyScroll && this.historyScroll.finishPullUp()
+            //   })
+            // }
+          })
+          this.historyScroll.on('pullingDown', () => {
+            console.log('下滑')
+            this.$nextTick(() => {
+              this.historyScroll.refresh() // DOM 结构发生变化后，重新初始化BScroll
+              this.historyScroll && this.historyScroll.finishPullDown()
+            })
+          })
+        }
       })
     },
     clearQuery () {
@@ -475,7 +543,7 @@ export default {
         from: this.page, // 起始页码
         openid: this.openid
       }).then(res => {
-        //alert(1000+this.page)
+        // alert(1000+this.page)
         this.loading = false
         // console.log(res.data)
         this.total = res.data.total // 一共多少条记录
