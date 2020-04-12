@@ -22,7 +22,7 @@
       <div style="padding-bottom: 20px">
         <div class="my_info_first_item" @click="gotoOption('collect')"><i class="iconfont iconlunwentimu"></i>论文收藏<i class="iconfont iconright"></i></div>
         <div class="my_info_first_item" @click="gotoOption('SpeCollect')"><i class="iconfont iconshoucang"></i>快报收藏<i class="iconfont iconright"></i></div>
-        <div class="my_info_first_item" @click="gotoOption('myDownLoad')"><i class="iconfont iconxiazai6"></i>资料库<i class="iconfont iconright" style="margin-left: 69%"></i></div>
+        <div class="my_info_first_item" @click="gotoOption('myDownLoad')"><i class="iconfont iconxiazai6"></i>在线云盘<i class="iconfont iconright"></i></div>
         <div class="my_info_first_feedback" @click="gotoOption('ideaFeedback')"><i class="iconfont iconyijianfankui1"></i>意见反馈<i class="iconfont iconright" style="margin-left: 65%"></i></div>
         <div class="my_info_first_item" @click="gotoOption('aboutUs')"><i class="iconfont iconguanyuwomen1"></i>关于我们<i class="iconfont iconright"></i></div>
 <!--        <div class="my_info_first_item" @click="gotoOption('setInfo')"><i class="iconfont iconshezhi1"></i>设置<i class="iconfont iconright" style="margin-left: 73%"></i></div>-->

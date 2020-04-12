@@ -4,7 +4,7 @@
       <div class="return__icon" @click="returnBack">
         <i class="iconfont iconfanhui"></i>
       </div>
-      <div class="title">资料库</div>
+      <div class="title">在线云盘</div>
     </div>
     <div class="collect_second" ref="collectSecond">
 <!--    <div class="collect_second" v-show="pdfList.length > 0" ref="collectSecond">-->

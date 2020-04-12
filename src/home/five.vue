@@ -399,7 +399,7 @@ export default {
       if (this.existsPdf.indexOf(item['uuid']) > -1) {
         this.$vux.toast.show({
           type: 'text',
-          text: '已存在‘我的-资料库’中',
+          text: '已存在‘我的-在线云盘’中',
           width: '8em'
         })
       } else {
@@ -410,7 +410,7 @@ export default {
           if (res.data.errno === 0) {
             // 显示
             this.$vux.toast.show({
-              text: '已添加到‘我的-资料库’中',
+              text: '已添加到‘我的-在线云盘’中',
               width: '8em'
             })
           }
